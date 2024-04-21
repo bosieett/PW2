@@ -56,7 +56,7 @@ const Form = () => {
     const isRegister = pageType === "register";
 
 const register = async(values, onSubmitProps)=> {
-    //esto nos permite enviar form info con lai
+    //esto nos permite enviar form info con imagen
     const formData = new FormData();
     for (let value in values){
         formData.append(value, values[value])
@@ -104,14 +104,14 @@ const register = async(values, onSubmitProps)=> {
 
     const  handleFormSubmit = async (values, onSubmitProps)=> {
        if (isLogin) await login(values, onSubmitProps);
-       if (isRegister) await register (values, onSubmitProps);
+       if (isRegister) await register(values, onSubmitProps);
     };
 
     return(
         <Formik
-        onSubmit= {handleFormSubmit}
-        initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
-        validationSchema={isLogin ? loginSchema : registerSchema}
+            onSubmit= {handleFormSubmit}
+            initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
+            validationSchema={isLogin ? loginSchema : registerSchema}
         >
             {({
                 values,
@@ -209,16 +209,10 @@ const register = async(values, onSubmitProps)=> {
 
                                     </Box>
                                   )}
-
-                              
-
-                                </Dropzone>
-                                
-
-
+                                </Dropzone>                                
                             </Box>
-                            </>
-                        )}
+                        </>
+                    )}
 
                         <TextField
                             label="Email"
@@ -229,9 +223,9 @@ const register = async(values, onSubmitProps)=> {
                             error={Boolean(touched.email)&& Boolean(errors.email)}
                             helperText={touched.email && errors.email}
                             sx={{gridColumn: "span 4"}}
-                            />
+                        />
 
-<TextField
+                        <TextField
                             label="Password"
                             type = "password"
                             onBlur= {handleBlur}
@@ -241,14 +235,15 @@ const register = async(values, onSubmitProps)=> {
                             error={Boolean(touched.password)&& Boolean(errors.password)}
                             helperText={touched.password && errors.password}
                             sx={{gridColumn: "span 4"}}
-                            />
+                        />
 
                      </Box>
 
                     {/*BUTTONS*/}
                     <Box>
                         <Button
-                        fullWidthtype="submit"
+                        fullWidth
+                        type="submit"
                         sx={{
                             m:"2rem 0",
                             p: "1rem",
@@ -261,18 +256,18 @@ const register = async(values, onSubmitProps)=> {
                         {isLogin ?"LOGIN": "REGISTER"}
                         </Button>
                         <Typography
-                        onClick={() => {
-                            setPageType(isLogin ? "register" : "login");
-                            resetForm();
-                        }}
-                        sx={{
-                            textDecoration: "underline",
-                            color: palette.primary.main,
-                            "&:hover":{
-                                cursor:"pointer",
-                                color: palette.primary.light,
-                            },
-                        }}
+                            onClick={() => {
+                                setPageType(isLogin ? "register" : "login");
+                                resetForm();
+                            }}
+                            sx={{
+                                textDecoration: "underline",
+                                color: palette.primary.main,
+                                "&:hover":{
+                                    cursor:"pointer",
+                                    color: palette.primary.light,
+                                },
+                            }}
                         >
                             {isLogin
                             ? "Dont have an account? Sign up here."

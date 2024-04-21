@@ -20,10 +20,10 @@ export const register = async (req, res) =>{
         
         const newUser = new User(
             {
-                firstName,
+            firstName,
             lastName,
             email,
-            password,
+            password: passwordHash,
             picturePath,
             friends,
             location,
@@ -67,7 +67,7 @@ export const verifyToken = async (req, res, next)=>{
 
         }
 
-        if (token.startWidth("Bearer")){
+        if (token.startsWidth("Bearer")){
             token = token.slice (7, token.length).trimLeft();
 
         }
