@@ -179,7 +179,7 @@ const register = async(values, onSubmitProps)=> {
                             />
                             <Box
                             gridColumn= "span 4"
-                            border= {'1px solid ${palette.neutral.medium}'}
+                            border= {`1px solid ${palette.neutral.medium}`}
                             borderRadius="5px"
                             p="1rem"
                             >
@@ -193,7 +193,7 @@ const register = async(values, onSubmitProps)=> {
                                   {({getRootProps, getInputProps})=>(
                                     <Box
                                     {...getRootProps()}
-                                    border={'2px dashed ${palette.primary.main}'}
+                                    border={`2px dashed ${palette.primary.main}`}
                                     p="1rem"
                                     sx={{ "&:hover": {cursor:"pointer"}}}
                                     >
