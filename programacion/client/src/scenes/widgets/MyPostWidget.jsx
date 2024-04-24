@@ -64,7 +64,7 @@ const MyPostWidget = ({picturePath}) => {
             <FlexBetween gap="1.5rem">
                 <UserImage image={picturePath}/>
                 <InputBase
-                placeholder="What's on your mind..."
+                placeholder="¿Qué estás pensando?..."
                 onChange={(e) => setPost(e.target.value)}
                 value={post}
                 sx={{
@@ -99,7 +99,7 @@ const MyPostWidget = ({picturePath}) => {
                                     >
                                         <input {...getInputProps()}/>
                                         {!image ? (
-                                            <p>Add Image Here</p>
+                                            <p>Añade una imagen aquí</p>
                                         ): (
                                             <FlexBetween>
                                                 <Typography>{image.name}</Typography>
@@ -130,7 +130,7 @@ const MyPostWidget = ({picturePath}) => {
                     color={mediumMain}
                     sx={{ "&:hover": {cursor: "pointer", color:medium}}}
                     >
-                       Image 
+                       Imagen 
                     </Typography>
                 </FlexBetween>
 
@@ -143,7 +143,7 @@ const MyPostWidget = ({picturePath}) => {
 
                 <FlexBetween gap="0.25rem">
                     <AttachFileOutlined sx={{ color: mediumMain}}/>
-                    <Typography color={mediumMain}>Attachment</Typography>
+                    <Typography color={mediumMain}>Adjuntar</Typography>
                 </FlexBetween>
 
                 <FlexBetween gap="0.25rem">

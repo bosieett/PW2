@@ -37,32 +37,31 @@ const Navbar = () =>{
     const neutralLight = theme.palette.neutral.light;
     const dark = theme.palette.neutral.dark;
     const background = theme.palette.background.default;
-    const primaryLight = theme.palette.primary.light;
-    const alt = theme.palette.background.alt;
+    //const primaryLight = theme.palette.primary.light;
+    //const alt = theme.palette.background.alt;
 
     const fullName = `${user.firstName} ${user.lastName}`;
 
 
-    return <FlexBetween padding="1rem 6%" background={alt}>
+    return <FlexBetween padding="1rem 6%" backgroundColor={'#c58c71'}>
         <FlexBetween gap="1.75rem">
-            <PetsIcon sx={{ fontSize : "40px" }}/>
             <Typography 
                 fontWeight="bold" 
                 fontSize="clamp(1rem, 2rem, 2.25rem)" 
-                color="primary" 
+                color="#ffecd9" 
                 onClick={() => navigate("/home")}
                 sx={{
                     "&:hover": {
-                        color: primaryLight,
+                        color: "#d5c5b9",
                         cursor: "pointer",
                     },
                 }}
             >
-                AdoPet
+                AD<PetsIcon sx={{ color: "#8e2020" }}/>PET
             </Typography>
             {isNonMobileScreens && (
                 <FlexBetween backgroundColor={neutralLight} borderRadius="9px" gap="3rem" padding="0.1rem 1.5rem">
-                    <InputBase placeholder="Search..."/>
+                    <InputBase placeholder="Buscar..."/>
                     <IconButton>
                         <Search/>
                     </IconButton>

@@ -98,13 +98,13 @@ const UserWidget = ({ userId, picturePath})=> {
              {/*THIRD ROW*/}
              <Box p="1rem 0">
                 <FlexBetween mb="0.5rem">
-                    <Typography color= {medium}>who's viewed your profile</Typography>
+                    <Typography color= {medium}>Cuántas personas vieron tu perfil</Typography>
                     <Typography color = {main} fontWeight= "500">
                        {viewedProfile}
                         </Typography>
                 </FlexBetween>
                 <FlexBetween>
-                <Typography color= {medium}>impressions of your post</Typography>
+                <Typography color= {medium}>Interacciones de tu post</Typography>
                     <Typography color = {main} fontWeight= "500">
                        {impressions}
                         </Typography>

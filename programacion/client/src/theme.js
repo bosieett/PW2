@@ -38,15 +38,15 @@ export const themeSettings = (mode) => {
             ...(mode === "dark") ? {
                 //palette values for dark mode
                 primary: {
-                    dark: colorTokens.primary[200],
-                    main: colorTokens.primary[500],
-                    light: colorTokens.primary[800]
+                    dark: '#8e2020',
+                    main: '#e08c59',
+                    light: '#eb9b0d'
                 },
                 neutral: {
-                    dark: colorTokens.grey[100],
-                    main: colorTokens.grey[200],
+                    dark: '#8e2020',
+                    main: '#a63020',
                     mediumMain: colorTokens.grey[300],
-                    medium: colorTokens.grey[400],
+                    medium: '#d86e53',
                     light: colorTokens.grey[700]
                 },
                 background: {
@@ -56,15 +56,15 @@ export const themeSettings = (mode) => {
             } : {
                //palette values for light mode
                 primary: {
-                    dark: colorTokens.primary[700],
-                    main: colorTokens.primary[500],
-                    light: colorTokens.primary[50]
+                    dark: '#8e2020',
+                    main: '#e08c59',
+                    light: '#eb9b0d'
                 },
                 neutral: {
-                    dark: colorTokens.grey[700],
-                    main: colorTokens.grey[500],
+                    dark: '#8e2020',
+                    main: '#a63020',
                     mediumMain: colorTokens.grey[400],
-                    medium: colorTokens.grey[300],
+                    medium: '#d86e53',
                     light: colorTokens.grey[50]
                 },
                 background: {

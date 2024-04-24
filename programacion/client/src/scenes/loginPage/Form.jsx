@@ -17,18 +17,18 @@ import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 
 const registerSchema = yup.object().shape({
-    firstName: yup.string().required("required"),
-    lastName: yup.string().required("required"),
-    email: yup.string().email ("invalid email").required("required"),
-    password: yup.string().required("required"),
-    location: yup.string().required("required"),
-    occupation: yup.string().required("required"),
-    picture: yup.string().required("required"),
+    firstName: yup.string().required("requerido"),
+    lastName: yup.string().required("requerido"),
+    email: yup.string().email ("correo invalido").required("requerido"),
+    password: yup.string().required("requerido"),
+    location: yup.string().required("requerido"),
+    occupation: yup.string().required("requerido"),
+    picture: yup.string().required("requerido"),
 })
 
 const loginSchema = yup.object().shape({
-    email: yup.string().email ("invalid email").required("required"),
-    password: yup.string().required("required"),
+    email: yup.string().email ("correo invalido").required("requerido"),
+    password: yup.string().required("requerido"),
 });
 
 const initialValuesRegister = {
@@ -138,7 +138,7 @@ const register = async(values, onSubmitProps)=> {
                         {isRegister && (
                             <>
                             <TextField
-                            label="First Name"
+                            label="Nombre(s)"
                             onBlur= {handleBlur}
                             onChange ={handleChange}
                             value= {values.firstName}
@@ -148,7 +148,7 @@ const register = async(values, onSubmitProps)=> {
                             sx={{gridColumn: "span 2"}}
                             />
                             <TextField
-                            label="Last Name"
+                            label="Apellido(s)"
                             onBlur= {handleBlur}
                             onChange ={handleChange}
                             value= {values.lastName}
@@ -158,7 +158,7 @@ const register = async(values, onSubmitProps)=> {
                             sx={{gridColumn: "span 2"}}
                             />
                             <TextField
-                            label="Location"
+                            label="Ubicación"
                             onBlur= {handleBlur}
                             onChange ={handleChange}
                             value= {values.location}
@@ -168,7 +168,7 @@ const register = async(values, onSubmitProps)=> {
                             sx={{gridColumn: "span 4"}}
                             />
                             <TextField
-                            label="Occupation"
+                            label="Ocupación"
                             onBlur= {handleBlur}
                             onChange ={handleChange}
                             value= {values.occupation}
@@ -199,7 +199,7 @@ const register = async(values, onSubmitProps)=> {
                                     >
                                         <input {...getInputProps()}/>
                                         {!values.picture ? (
-                                            <p>Add Picture Here</p>
+                                            <p>Añade una imagen aquí</p>
                                         ): (
                                             <FlexBetween>
                                                 <Typography>{values.picture.name}</Typography>
@@ -215,7 +215,7 @@ const register = async(values, onSubmitProps)=> {
                     )}
 
                         <TextField
-                            label="Email"
+                            label="Correo electronico"
                             onBlur= {handleBlur}
                             onChange ={handleChange}
                             value= {values.email}
@@ -226,7 +226,7 @@ const register = async(values, onSubmitProps)=> {
                         />
 
                         <TextField
-                            label="Password"
+                            label="Contraseña"
                             type = "password"
                             onBlur= {handleBlur}
                             onChange ={handleChange}
@@ -253,7 +253,7 @@ const register = async(values, onSubmitProps)=> {
 
                         }}
                         >  
-                        {isLogin ?"LOGIN": "REGISTER"}
+                        {isLogin ?"INICIAR SESION": "REGISTRARSE"}
                         </Button>
                         <Typography
                             onClick={() => {
@@ -270,8 +270,8 @@ const register = async(values, onSubmitProps)=> {
                             }}
                         >
                             {isLogin
-                            ? "Dont have an account? Sign up here."
-                            : "Already have an account? Login here."}
+                            ? "¿No tienes una cuenta? Registrate aquí."
+                            : "¿Ya tienes cuenta? Inicia sesión aquí."}
 
                         </Typography>
                     </Box>
