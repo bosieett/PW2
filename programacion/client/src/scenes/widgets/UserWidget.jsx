@@ -55,6 +55,7 @@ const UserWidget = ({ userId, picturePath})=> {
         gap = "0.5 rem"
         pb= "1.1rem"
         onClick={() => navigate (`/profile/${userId}`)}
+        sx={{cursor: "pointer"}}
         >
             <FlexBetween gap= "1rem">
                 <UserImage image = {picturePath}/>
@@ -93,63 +94,6 @@ const UserWidget = ({ userId, picturePath})=> {
                 </Box> 
             </Box>
 
-            <Divider/>
-
-             {/*THIRD ROW*/}
-             <Box p="1rem 0">
-                <FlexBetween mb="0.5rem">
-                    <Typography color= {medium}>Cuántas personas vieron tu perfil</Typography>
-                    <Typography color = {main} fontWeight= "500">
-                       {viewedProfile}
-                        </Typography>
-                </FlexBetween>
-                <FlexBetween>
-                <Typography color= {medium}>Interacciones de tu post</Typography>
-                    <Typography color = {main} fontWeight= "500">
-                       {impressions}
-                        </Typography>
-
-                </FlexBetween>
-             </Box>
-
-             <Divider/>
-
-              {/*FOURTH ROW*/}
-              <Box p="1rem 0">
-                <Typography fontSize="1rem" color={main} fontWeight="500" mb= "1rem">
-                   Social Profiles 
-                </Typography>
-                <FlexBetween gap ="1rem" mb = "0.5rem">
-                    <FlexBetween gap = "1rem">
-                        <img src= "../assets/twitter.png" alt= "twitter" />
-                <Box>
-                    <Typography color={main} fontWeight= "500">
-                        twitter
-                    </Typography>
-                    <Typography color= {medium}>Social Network</Typography>
-              </Box>
-        </FlexBetween>
-        <EditOutlined sx= {{ color:main }}/>
-
-        </FlexBetween>
-
-        <FlexBetween gap ="1rem">
-                    <FlexBetween gap = "1rem">
-                        <img src= "../assets/linked.png" alt= "linkedin" />
-                <Box>
-                    <Typography color={main} fontWeight= "500">
-                        LinkedIn
-                    </Typography>
-                    <Typography color= {medium}>Network Platform</Typography>
-
-
-              </Box>
-        </FlexBetween>
-        <EditOutlined sx= {{ color:main }}/>
-
-        </FlexBetween>
-
-        </Box>
        </WidgetWrapper> 
     );
     
