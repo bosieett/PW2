@@ -52,6 +52,10 @@ export const themeSettings = (mode) => {
                 background: {
                     default: colorTokens.grey[900],
                     alt: colorTokens.grey[800],
+                },
+                hoverBtn:{
+                    color: "#8E5937",
+                    typo: "#FFECD9"
                 }
             } : {
                //palette values for light mode
@@ -70,7 +74,11 @@ export const themeSettings = (mode) => {
                 background: {
                     default: colorTokens.grey[10],
                     alt: colorTokens.grey[0]
-                } 
+                },
+                hoverBtn:{
+                    color: "#8E5937",
+                    typo: "#FFECD9"
+                }
             }
         },
         typography: {

@@ -7,6 +7,8 @@ import FriendListWidget from "scenes/widgets/FriendListWidget";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import UserWidget from "scenes/widgets/UserWidget";
+import PetForm from "./petform";
+import WidgetWrapper from "components/WidgetWrapper";
 
 const PetsPage = () =>{
 
@@ -48,7 +50,9 @@ const PetsPage = () =>{
                  flexBasis={isNonMobileScreens ? "42%" : undefined}
                  mt={isNonMobileScreens ? undefined : "2rem"}
                  >
-                    a
+                    <WidgetWrapper>
+                    <PetForm></PetForm>
+                    </WidgetWrapper>
                  </Box>
                  
             </Box>
