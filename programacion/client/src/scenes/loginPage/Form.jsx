@@ -15,6 +15,7 @@ import {useDispatch} from "react-redux";
 import {setLogin} from "state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
+import AlertCustom from "../widgets/AlertCustom";
 
 const registerSchema = yup.object().shape({
     firstName: yup.string().required("requerido"),
@@ -55,6 +56,22 @@ const Form = () => {
     const isLogin = pageType === "login";
     const isRegister = pageType === "register";
 
+    {/*Alerta*/}
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertSeverity, setAlertSeverity] = useState("success");
+
+    const handleOpenAlert = (message, severity) => {
+        setAlertMessage(message);
+        setAlertSeverity(severity);
+        setAlertOpen(true);
+    };
+
+    const handleCloseAlert = () => {
+        setAlertOpen(false);
+    };
+
+
 const register = async(values, onSubmitProps)=> {
     //esto nos permite enviar form info con imagen
     const formData = new FormData();
@@ -72,6 +89,7 @@ const register = async(values, onSubmitProps)=> {
     );
     const savedUser= await savedUserResponse.json();
     onSubmitProps.resetForm();
+    handleOpenAlert("Usuario registrado correctamente", "success")
 
     if(savedUser){
         setPageType("login");
@@ -274,13 +292,17 @@ const register = async(values, onSubmitProps)=> {
                             : "¿Ya tienes cuenta? Inicia sesión aquí."}
 
                         </Typography>
+                    
+                                <AlertCustom
+                                  open={alertOpen}
+                                  message={alertMessage}
+                                  severity={alertSeverity}
+                                  handleClose={handleCloseAlert}></AlertCustom>
                     </Box>
 
                 </form>
 
             )}
-
-
 
         </Formik>
     )

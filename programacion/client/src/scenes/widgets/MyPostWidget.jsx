@@ -15,7 +15,7 @@ import {
     useTheme,
     Button,
     IconButton,
-    useMediaQuery,
+    useMediaQuery 
 } from "@mui//material";
 import FlexBetween from "components/FlexBetween";
 import Dropzone from "react-dropzone";
@@ -24,12 +24,28 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
+import AlertCustom from "./AlertCustom";
 
-const MyPostWidget = ({picturePath}) => {
+const MyPostWidget = ({picturePath, isProfile = false}) => {
     const dispatch = useDispatch();
     const [isImage, setIsImage] = useState(false);
     const [image, setImage] = useState(null);
     const [post, setPost] = useState("");
+
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertSeverity, setAlertSeverity] = useState("success");
+
+    const handleOpenAlert = (message, severity) => {
+        setAlertMessage(message);
+        setAlertSeverity(severity);
+        setAlertOpen(true);
+    };
+
+    const handleCloseAlert = () => {
+        setAlertOpen(false);
+    };
+
     const { palette } = useTheme();
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
@@ -38,6 +54,8 @@ const MyPostWidget = ({picturePath}) => {
     const medium = palette.neutral.medium;
 
     const handlePost = async () => {
+        
+        if(image || post){
         const formData = new FormData();
         formData.append("userId", _id);
         formData.append("description", post);
@@ -52,14 +70,33 @@ const MyPostWidget = ({picturePath}) => {
             body: formData,
 
         });
+       
 
-        const posts = await response.json();
+        if(isProfile){
+           const response2 = await fetch(`http://localhost:3001/posts/${_id}/posts`, {
+        method: "GET",
+        headers: {Authorization: `Bearer ${token}` },
+        });
+        const posts = await response2.json();
         dispatch(setPosts({ posts }));
+        }
+        else{
+            const posts = await response.json();
+            dispatch(setPosts({ posts }));
+        }
+
         setImage(null);
         setPost("");
+
+        handleOpenAlert("Publicación realizada con éxito!", "success");
+    }
+    else{
+        handleOpenAlert("Ingresa un archivo o texto al cuerpo de tu publicación", "warning")
+    }
     };
 
      return (
+
         <WidgetWrapper>
             <FlexBetween gap="1.5rem">
                 <UserImage image={picturePath}/>
@@ -166,9 +203,12 @@ const MyPostWidget = ({picturePath}) => {
                >
                 POST
                </Button>
-
-
                </FlexBetween>
+              <AlertCustom
+              open={alertOpen}
+              message={alertMessage}
+              severity={alertSeverity}
+              handleClose={handleCloseAlert}></AlertCustom>
         </WidgetWrapper>
      );
 

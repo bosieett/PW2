@@ -8,8 +8,7 @@ import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import UserWidget from "scenes/widgets/UserWidget";
 
-
-const ProfilePage = () =>{
+const PetsPage = () =>{
 
     const [user, setUser] = useState(null);
     const {userId} = useParams();
@@ -44,34 +43,16 @@ const ProfilePage = () =>{
             >
                 <Box flexBasis={isNonMobileScreens ? "26%": undefined}>
                     <UserWidget userId={userId} picturePath={user.picturePath}/>
-                    <Box m="2rem 0"/>
-                    <FriendListWidget userId={userId}/>
                 </Box>
                 <Box
                  flexBasis={isNonMobileScreens ? "42%" : undefined}
                  mt={isNonMobileScreens ? undefined : "2rem"}
                  >
-                    
-                    {userSelf._id === userId ? (
-                <>
-                    <MyPostWidget picturePath={user.picturePath} isProfile={true}/>
-                    <Box m="2rem 0" />
-                </>
-            ) :  <Box gap="1.75rem" background-color="#ffecd9">
-            <Typography 
-                fontWeight="bold" 
-                fontSize="clamp(1rem, 2rem, 2.25rem)"
-                color="#c58c71"
-            >
-                Publicaciones del usuario
-            </Typography>
-            
-        </Box>}
-                    <PostsWidget userId={userId} isProfile/>
+                    a
                  </Box>
                  
             </Box>
     </Box>
 }
 
-export default ProfilePage;
+export default PetsPage;

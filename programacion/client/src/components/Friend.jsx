@@ -74,7 +74,8 @@ import {
                     </Typography>
                 </Box>
             </FlexBetween>
-
+            {friendId!==_id ? (
+            <>
             <IconButton
             onClick={() => patchFriend()}
             sx={{backgroundColor: primaryLight, p: "0.6rem"}}
@@ -88,6 +89,8 @@ import {
                 )
                 }
             </IconButton>
+            </>
+            ) : null}
         </FlexBetween>
     );
 };

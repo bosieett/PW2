@@ -103,6 +103,9 @@ const Navbar = () =>{
                         <MenuItem value={fullName}>
                             <Typography>{fullName}</Typography>
                         </MenuItem>
+                        <MenuItem onClick={() => navigate (`/pets/${user._id}`)}>
+                            <Typography>Mascotas</Typography>
+                        </MenuItem>
                         <MenuItem onClick={()=> dispatch(setLogout())}>Salir</MenuItem>
                     </Select>
                 </FormControl>
@@ -176,6 +179,8 @@ const Navbar = () =>{
                         input={<InputBase />}
                     >
                         <MenuItem value={fullName}>
+                            <Typography>{fullName}</Typography>
+                        </MenuItem><MenuItem value={fullName}>
                             <Typography>{fullName}</Typography>
                         </MenuItem>
                         <MenuItem onClick={()=> dispatch(setLogout())}>Salir</MenuItem>

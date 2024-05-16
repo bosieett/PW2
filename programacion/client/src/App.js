@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material";
 import { themeSettings } from "theme";
+import PetsPage from "scenes/petsPage";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
               <Route path="/" element={<LoginPage />} />
               <Route path="/home" element={isAuth ? <HomePage /> : <Navigate to = "/"/>} />
               <Route path="/profile/:userId" element={isAuth ? <ProfilePage />: <Navigate to = "/"/>} />
+              <Route path="/pets/:userId" element={isAuth ? <PetsPage />: <Navigate to = "/"/>} />
             </Routes>
         </ThemeProvider>
       </BrowserRouter>
