@@ -39,7 +39,7 @@ const PetForm = () => {
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
 
-    {/*Alerta*/}
+    /*Alerta*/
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [alertSeverity, setAlertSeverity] = useState("success");
@@ -78,7 +78,7 @@ const register = async(values, onSubmitProps)=> {
         throw new Error('Error en el registro de la mascota');
     }
 
-    const savedPet= await savedPetResponse.json();
+    //const savedPet= await savedPetResponse.json();
     onSubmitProps.resetForm();
     handleOpenAlert("Mascota registrada correctamente", "success")
 

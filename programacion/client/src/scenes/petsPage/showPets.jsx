@@ -1,4 +1,4 @@
-import { Box, useMediaQuery, Typography, Button } from "@mui/material";
+import { Box, useMediaQuery, Typography, Button, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Navbar from "scenes/navbar";
@@ -7,6 +7,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { setPets } from "state";
 import CardMedia from '@mui/material/CardMedia';
 import FlexBetween from "components/FlexBetween";
+import PetsIcon from '@mui/icons-material/Pets';
 
 const PetsProfilePage = () =>{
 
@@ -56,7 +57,15 @@ const PetsProfilePage = () =>{
                 <Box flexBasis={isNonMobileScreens ? "26%": undefined}>
                     <UserWidget userId={_id} picturePath={user.picturePath}/>
                 </Box>
-                    <>
+                <Box
+                     display= "grid"
+                     gap="2px"
+                     gridTemplateColumns="repeat(4,minmax(0,1fr)) "
+                     sx={{
+                        "& > div": { gridColumn: isNonMobileScreens ? undefined: "span 4"},
+
+                     }} 
+                     >
         {pets.map(
             ({
             _id,
@@ -69,141 +78,15 @@ const PetsProfilePage = () =>{
             picturePath,
             isAdopted,
             
-        }) => ( 
-        <FlexBetween>
-        <Box height="500px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" overflow-y="scroll">
+        }) => (
+            <>
+            <Box height="500px" width="300px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" sx={{gridColumn: "span 1"}}>
             <WidgetWrapper>
         <CardMedia
           component="img"
           height="140"
           image={`http://localhost:3001/assets/${picturePath}`}
-          alt="green iguana"
-          sx={{borderRadius: "0.75rem"}}
-        />
-            <Typography
-            textAlign="center"
-            variant= "h3"
-            color= "#8e2020"
-            fontWeight="500"
-            >{petName}</Typography>
-            <FlexBetween>
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Edad: {petAge}</Typography>
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Tamaño: {petSize}</Typography>
-        </FlexBetween>
-            <FlexBetween>
-
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Sexo: {petGender}</Typography>
-        </FlexBetween>
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Descripción: {petDescription}</Typography>
-
-            {isAdopted ? (
-            <Button>¡Encontró un hogar!</Button>):(
-            <Button>Adoptar</Button>)}
-            </WidgetWrapper>
-            </Box>
-            <Box height="500px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" overflow-y="scroll">
-            <WidgetWrapper>
-        <CardMedia
-          component="img"
-          height="140"
-          image={`http://localhost:3001/assets/${picturePath}`}
-          alt="green iguana"
-          sx={{borderRadius: "0.75rem"}}
-        />
-            <Typography
-            textAlign="center"
-            variant= "h3"
-            color= "#8e2020"
-            fontWeight="500"
-            >{petName}</Typography>
-            <FlexBetween>
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Edad: {petAge}</Typography>
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Tamaño: {petSize}</Typography>
-        </FlexBetween>
-            <FlexBetween>
-
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Sexo: {petGender}</Typography>
-        </FlexBetween>
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Descripción: {petDescription}</Typography>
-
-            {isAdopted ? (
-            <Button>¡Encontró un hogar!</Button>):(
-            <Button>Adoptar</Button>)}
-            </WidgetWrapper>
-            </Box>
-            <Box height="500px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" overflow-y="scroll">
-            <WidgetWrapper>
-        <CardMedia
-          component="img"
-          height="140"
-          image={`http://localhost:3001/assets/${picturePath}`}
-          alt="green iguana"
-          sx={{borderRadius: "0.75rem"}}
-        />
-            <Typography
-            textAlign="center"
-            variant= "h3"
-            color= "#8e2020"
-            fontWeight="500"
-            >{petName}</Typography>
-            <FlexBetween>
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Edad: {petAge}</Typography>
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Tamaño: {petSize}</Typography>
-        </FlexBetween>
-            <FlexBetween>
-
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Sexo: {petGender}</Typography>
-        </FlexBetween>
-            <Typography
-            variant= "body2"
-            color= "#8e2020"
-            fontWeight="500">Descripción: {petDescription}</Typography>
-
-            {isAdopted ? (
-            <Button>¡Encontró un hogar!</Button>):(
-            <Button>Adoptar</Button>)}
-            </WidgetWrapper>
-            </Box>
-            <Box height="500px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" overflow-y="scroll">
-            <WidgetWrapper width="300px">
-        <CardMedia
-          component="img"
-          height="140"
-          image={`http://localhost:3001/assets/${picturePath}`}
-          alt="green iguana"
+          alt="pet picture"
           sx={{borderRadius: "0.75rem"}}
         />
             <Typography
@@ -233,26 +116,490 @@ const PetsProfilePage = () =>{
              variant="body2"
                     color="#8e2020"
                     fontWeight="500"
+                    sx={{
+                        overflowY: "scroll",
+                        '::-webkit-scrollbar': {
+                            width: '8px',
+                        },
+                        '::-webkit-scrollbar-track': {
+                            background: 'transparent',
+                        },
+                        '::-webkit-scrollbar-thumb': {
+                            background: '#ffecd9',
+                            borderRadius: '10px',
+                        },
+                        '::-webkit-scrollbar-thumb:hover': {
+                            background: '#d5c5b9',
+                        },
+                    }}
                     style={{
+                        height: "6em",
                         display: "block",
-                        maxHeight: "6em",  // limit the height to 3 lines
-                        overflow: "hidden",
+                        overflow: "overlay",
                         textOverflow: "ellipsis",
-                        whiteSpace: "pre-wrap",
-                        lineHeight: "2em"
-                    }}>Descripción: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA{petDescription}</Typography>
+                        overflowWrap: "break-word",
+                        whiteSpace: "normal"
+                    }}>Descripción: {petDescription}</Typography>
 
-            {isAdopted ? (
-            <Button>¡Encontró un hogar!</Button>):(
-            <Button>Adoptar</Button>)}
+                    <Box display="flex" justifyContent="center" mt="1rem">
+                    {isAdopted ? (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            ¡Encontró un hogar!
+                        </Button>
+                    ) : (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            Adoptar
+                        </Button>
+                    )}
+                </Box>
+            </WidgetWrapper>
+            </Box><Box height="500px" width="300px"flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" sx={{gridColumn: "span 1"}}>
+            <WidgetWrapper>
+        <CardMedia
+          component="img"
+          height="140"
+          image={`http://localhost:3001/assets/${picturePath}`}
+          alt="pet picture"
+          sx={{borderRadius: "0.75rem"}}
+        />
+            <Typography
+            textAlign="center"
+            variant= "h3"
+            color= "#8e2020"
+            fontWeight="500"
+            >{petName}</Typography>
+            <FlexBetween>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Edad: {petAge}</Typography>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Tamaño: {petSize}</Typography>
+        </FlexBetween>
+            <FlexBetween>
+
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Sexo: {petGender}</Typography>
+        </FlexBetween>
+            <Typography
+             variant="body2"
+                    color="#8e2020"
+                    fontWeight="500"
+                    sx={{
+                        overflowY: "scroll",
+                        '::-webkit-scrollbar': {
+                            width: '8px',
+                        },
+                        '::-webkit-scrollbar-track': {
+                            background: 'transparent',
+                        },
+                        '::-webkit-scrollbar-thumb': {
+                            background: '#ffecd9',
+                            borderRadius: '10px',
+                        },
+                        '::-webkit-scrollbar-thumb:hover': {
+                            background: '#d5c5b9',
+                        },
+                    }}
+                    style={{
+                        height: "6em",
+                        display: "block",
+                        overflow: "overlay",
+                        textOverflow: "ellipsis",
+                        overflowWrap: "break-word",
+                        whiteSpace: "normal"
+                    }}>Descripción: {petDescription}</Typography>
+
+                    <Box display="flex" justifyContent="center" mt="1rem">
+                    {isAdopted ? (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            ¡Encontró un hogar!
+                        </Button>
+                    ) : (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            Adoptar
+                        </Button>
+                    )}
+                </Box>
+            </WidgetWrapper>
+            </Box><Box height="500px" width="300px"flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" sx={{gridColumn: "span 1"}}>
+            <WidgetWrapper>
+        <CardMedia
+          component="img"
+          height="140"
+          image={`http://localhost:3001/assets/${picturePath}`}
+          alt="pet picture"
+          sx={{borderRadius: "0.75rem"}}
+        />
+            <Typography
+            textAlign="center"
+            variant= "h3"
+            color= "#8e2020"
+            fontWeight="500"
+            >{petName}</Typography>
+            <FlexBetween>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Edad: {petAge}</Typography>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Tamaño: {petSize}</Typography>
+        </FlexBetween>
+            <FlexBetween>
+
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Sexo: {petGender}</Typography>
+        </FlexBetween>
+            <Typography
+             variant="body2"
+                    color="#8e2020"
+                    fontWeight="500"
+                    sx={{
+                        overflowY: "scroll",
+                        '::-webkit-scrollbar': {
+                            width: '8px',
+                        },
+                        '::-webkit-scrollbar-track': {
+                            background: 'transparent',
+                        },
+                        '::-webkit-scrollbar-thumb': {
+                            background: '#ffecd9',
+                            borderRadius: '10px',
+                        },
+                        '::-webkit-scrollbar-thumb:hover': {
+                            background: '#d5c5b9',
+                        },
+                    }}
+                    style={{
+                        height: "6em",
+                        display: "block",
+                        overflow: "overlay",
+                        textOverflow: "ellipsis",
+                        overflowWrap: "break-word",
+                        whiteSpace: "normal"
+                    }}>Descripción: {petDescription}</Typography>
+
+                    <Box display="flex" justifyContent="center" mt="1rem">
+                    {isAdopted ? (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            ¡Encontró un hogar!
+                        </Button>
+                    ) : (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            Adoptar
+                        </Button>
+                    )}
+                </Box>
+            </WidgetWrapper>
+            </Box><Box height="500px" width="300px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" sx={{gridColumn: "span 1"}}>
+            <WidgetWrapper>
+        <CardMedia
+          component="img"
+          height="140"
+          image={`http://localhost:3001/assets/${picturePath}`}
+          alt="pet picture"
+          sx={{borderRadius: "0.75rem"}}
+        />
+            <Typography
+            textAlign="center"
+            variant= "h3"
+            color= "#8e2020"
+            fontWeight="500"
+            >{petName}</Typography>
+            <FlexBetween>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Edad: {petAge}</Typography>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Tamaño: {petSize}</Typography>
+        </FlexBetween>
+            <FlexBetween>
+
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Sexo: {petGender}</Typography>
+        </FlexBetween>
+            <Typography
+             variant="body2"
+                    color="#8e2020"
+                    fontWeight="500"
+                    sx={{
+                        overflowY: "scroll",
+                        '::-webkit-scrollbar': {
+                            width: '8px',
+                        },
+                        '::-webkit-scrollbar-track': {
+                            background: 'transparent',
+                        },
+                        '::-webkit-scrollbar-thumb': {
+                            background: '#ffecd9',
+                            borderRadius: '10px',
+                        },
+                        '::-webkit-scrollbar-thumb:hover': {
+                            background: '#d5c5b9',
+                        },
+                    }}
+                    style={{
+                        height: "6em",
+                        display: "block",
+                        overflow: "overlay",
+                        textOverflow: "ellipsis",
+                        overflowWrap: "break-word",
+                        whiteSpace: "normal"
+                    }}>Descripción: {petDescription}</Typography>
+
+                    <Box display="flex" justifyContent="center" mt="1rem">
+                    {isAdopted ? (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            ¡Encontró un hogar!
+                        </Button>
+                    ) : (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            Adoptar
+                        </Button>
+                    )}
+                </Box>
+            </WidgetWrapper>
+            </Box><Box height="500px" width="300px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" sx={{gridColumn: "span 1"}}>
+            <WidgetWrapper>
+        <CardMedia
+          component="img"
+          height="140"
+          image={`http://localhost:3001/assets/${picturePath}`}
+          alt="pet picture"
+          sx={{borderRadius: "0.75rem"}}
+        />
+            <Typography
+            textAlign="center"
+            variant= "h3"
+            color= "#8e2020"
+            fontWeight="500"
+            >{petName}</Typography>
+            <FlexBetween>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Edad: {petAge}</Typography>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Tamaño: {petSize}</Typography>
+        </FlexBetween>
+            <FlexBetween>
+
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Sexo: {petGender}</Typography>
+        </FlexBetween>
+            <Typography
+             variant="body2"
+                    color="#8e2020"
+                    fontWeight="500"
+                    sx={{
+                        overflowY: "scroll",
+                        '::-webkit-scrollbar': {
+                            width: '8px',
+                        },
+                        '::-webkit-scrollbar-track': {
+                            background: 'transparent',
+                        },
+                        '::-webkit-scrollbar-thumb': {
+                            background: '#ffecd9',
+                            borderRadius: '10px',
+                        },
+                        '::-webkit-scrollbar-thumb:hover': {
+                            background: '#d5c5b9',
+                        },
+                    }}
+                    style={{
+                        height: "6em",
+                        display: "block",
+                        overflow: "overlay",
+                        textOverflow: "ellipsis",
+                        overflowWrap: "break-word",
+                        whiteSpace: "normal"
+                    }}>Descripción: {petDescription}</Typography>
+
+                    <Box display="flex" justifyContent="center" mt="1rem">
+                    {isAdopted ? (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            ¡Encontró un hogar!
+                        </Button>
+                    ) : (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            Adoptar
+                        </Button>
+                    )}
+                </Box>
+            </WidgetWrapper>
+            </Box><Box height="500px" width="300px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" sx={{gridColumn: "span 1"}}>
+            <WidgetWrapper>
+        <CardMedia
+          component="img"
+          height="140"
+          image={`http://localhost:3001/assets/${picturePath}`}
+          alt="pet picture"
+          sx={{borderRadius: "0.75rem"}}
+        />
+            <Typography
+            textAlign="center"
+            variant= "h3"
+            color= "#8e2020"
+            fontWeight="500"
+            >{petName}</Typography>
+            <FlexBetween>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Edad: {petAge}</Typography>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Tamaño: {petSize}</Typography>
+        </FlexBetween>
+            <FlexBetween>
+
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Sexo: {petGender}</Typography>
+        </FlexBetween>
+            <Typography
+             variant="body2"
+                    color="#8e2020"
+                    fontWeight="500"
+                    sx={{
+                        overflowY: "scroll",
+                        '::-webkit-scrollbar': {
+                            width: '8px',
+                        },
+                        '::-webkit-scrollbar-track': {
+                            background: 'transparent',
+                        },
+                        '::-webkit-scrollbar-thumb': {
+                            background: '#ffecd9',
+                            borderRadius: '10px',
+                        },
+                        '::-webkit-scrollbar-thumb:hover': {
+                            background: '#d5c5b9',
+                        },
+                    }}
+                    style={{
+                        height: "6em",
+                        display: "block",
+                        overflow: "overlay",
+                        textOverflow: "ellipsis",
+                        overflowWrap: "break-word",
+                        whiteSpace: "normal"
+                    }}>Descripción: {petDescription}</Typography>
+
+                    <Box display="flex" justifyContent="center" mt="1rem">
+                    {isAdopted ? (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            ¡Encontró un hogar!
+                        </Button>
+                    ) : (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            Adoptar
+                        </Button>
+                    )}
+                </Box>
             </WidgetWrapper>
             </Box>
-            </FlexBetween>
+        <Box height="500px" width="300px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" sx={{gridColumn: "span 1"}}>
+            <WidgetWrapper>
+        <CardMedia
+          component="img"
+          height="140"
+          image={`http://localhost:3001/assets/${picturePath}`}
+          alt="pet picture"
+          sx={{borderRadius: "0.75rem"}}
+        />
+            <Typography
+            textAlign="center"
+            variant= "h3"
+            color= "#8e2020"
+            fontWeight="500"
+            >{petName}</Typography>
+            <FlexBetween>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Edad: {petAge}</Typography>
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Tamaño: {petSize}</Typography>
+        </FlexBetween>
+            <FlexBetween>
+
+            <Typography
+            variant= "body2"
+            color= "#8e2020"
+            fontWeight="500">Sexo: {petGender}</Typography>
+        </FlexBetween>
+            <Typography
+             variant="body2"
+                    color="#8e2020"
+                    fontWeight="500"
+                    sx={{
+                        overflowY: "scroll",
+                        '::-webkit-scrollbar': {
+                            width: '8px',
+                        },
+                        '::-webkit-scrollbar-track': {
+                            background: 'transparent',
+                        },
+                        '::-webkit-scrollbar-thumb': {
+                            background: '#ffecd9',
+                            borderRadius: '10px',
+                        },
+                        '::-webkit-scrollbar-thumb:hover': {
+                            background: '#d5c5b9',
+                        },
+                    }}
+                    style={{
+                        height: "6em",
+                        display: "block",
+                        overflow: "overlay",
+                        textOverflow: "ellipsis",
+                        overflowWrap: "break-word",
+                        whiteSpace: "normal"
+                    }}>Descripción: {petDescription}</Typography>
+
+                    <Box display="flex" justifyContent="center" mt="1rem">
+                    {isAdopted ? (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            ¡Encontró un hogar!
+                        </Button>
+                    ) : (
+                        <Button variant="contained" endIcon={<PetsIcon />}>
+                            Adoptar
+                        </Button>
+                    )}
+                </Box>
+            </WidgetWrapper>
+            </Box>
+
+            </>
         )
 
 
         )}
-        </>
+        </Box>
                  
             </Box>
     </Box>
