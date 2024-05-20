@@ -72,16 +72,6 @@ const Navbar = () =>{
         {/* Desktop NAV */}
         {isNonMobileScreens ? (
             <FlexBetween gap="2rem">
-                <IconButton onClick={()=> dispatch(setMode())}>
-                    {theme.palette.mode === "dark" ? (
-                        <DarkMode sx={{ fontSize : "25px" }} />
-                    ): (
-                        <LightMode sx={{ color: dark, fontSize:"25px" }}/>
-                    )}
-                </IconButton>
-                <Message sx={{ fontSize : "25px" }}/>
-                <Notifications sx={{ fontSize : "25px" }}/>
-                <Help sx={{ fontSize : "25px" }}/>
                 <FormControl variant="standard" value={fullName}>
                     <Select
                         value={fullName}
@@ -104,6 +94,9 @@ const Navbar = () =>{
                             <Typography>{fullName}</Typography>
                         </MenuItem>
                         <MenuItem onClick={() => navigate (`/pets/${user._id}`)}>
+                            <Typography>Dar de alta mascota</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={() => navigate (`/pets`)}>
                             <Typography>Mascotas</Typography>
                         </MenuItem>
                         <MenuItem onClick={()=> dispatch(setLogout())}>Salir</MenuItem>

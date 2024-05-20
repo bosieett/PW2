@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const petSchema = mongoose.Schema({
     userId:{
         type: String,
@@ -11,10 +13,23 @@ const petSchema = mongoose.Schema({
          type: String,
         required: true,
     },
-    petname: {
+    petName: {
         type: String,
         required: true,
     },
+    petAge: {
+        type: String,
+        required: true,
+    },
+    petGender: {
+        type: String,
+        required: true,
+    },
+    petSize: { 
+        type: String,
+        required: true,
+    },
+    petDescription: String,
     picturePath: String,
     isAdopted: Boolean,
 },

@@ -10,29 +10,34 @@ import{
 import  EditOutlinedIcon  from "@mui/icons-material/EditOutlined";
 import{ Formik} from "formik";
 import * as yup from "yup";
-import { useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {setLogin} from "state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 import AlertCustom from "../widgets/AlertCustom";
+import { useSelector } from "react-redux";
 
 const petSchema = yup.object().shape({
     picture: yup.string().required("requerido"),
-    petname: yup.string().required("requerido"),
+    petName: yup.string().required("requerido"),
+    petAge: yup.string().required("requerido"),
+    petSize: yup.string().required("requerido"),
+    petGender: yup.string().required("requerido")
 });
 
 
 const initialValues = {
-    petname: "",
-    picture: ""
+    petName: "",
+    picture: "",
+    petAge: "",
+    petSize: "",
+    petGender: "",
+    petDescription: "",
 };
 
 const PetForm = () => {
     const {palette}= useTheme();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
     const isNonMobile = useMediaQuery("(min-width:600px)");
+    const { _id } = useSelector((state) => state.user);
+    const token = useSelector((state) => state.token);
 
     {/*Alerta*/}
     const [alertOpen, setAlertOpen] = useState(false);
@@ -51,50 +56,38 @@ const PetForm = () => {
 
 
 const register = async(values, onSubmitProps)=> {
-    //esto nos permite enviar form info con imagen
     const formData = new FormData();
     for (let value in values){
         formData.append(value, values[value])
     }
     formData.append('picturePath',values.picture.name);
+    formData.append('userId', _id);
 
-    const savedUserResponse = await fetch(
-        "http://localhost:3001/auth/register",
+    const savedPetResponse = await fetch(
+        "http://localhost:3001/pets/register",
         {
             method: "POST",
+            headers: {Authorization: `Bearer ${token}` },
             body: formData,
         }
     );
-    const savedUser= await savedUserResponse.json();
+
+    
+    if (!savedPetResponse.ok) {
+        handleOpenAlert('Error en el registro de la mascota', "Error");
+        throw new Error('Error en el registro de la mascota');
+    }
+
+    const savedPet= await savedPetResponse.json();
     onSubmitProps.resetForm();
     handleOpenAlert("Mascota registrada correctamente", "success")
 
 };
 
-    const login = async (values,onSubmitProps ) =>{
-        const loggedInResponse = await fetch(
-            "http://localhost:3001/auth/login",
-            {
-                method: "POST",
-                headers:{ "Content-Type": "application/json"},
-                body: JSON.stringify(values),
-            }
-        );
 
-        const loggedIn = await loggedInResponse.json();
-        onSubmitProps.resetForm();
-        if (loggedIn){
-            dispatch(
-                setLogin({
-                    user: loggedIn.user,
-                    token: loggedIn.token,
-                })
-            );
-            navigate ("/home");
-        }
-    };
 
     const  handleFormSubmit = async (values, onSubmitProps)=> {
+        register(values, onSubmitProps);
     };
 
     return(
@@ -125,16 +118,68 @@ const register = async(values, onSubmitProps)=> {
 
                      }} 
                      >
+                            <Typography
+                             fontWeight="bold" 
+                            fontSize="clamp(1rem, 2rem, 2.25rem)"
+                            color="#8e2020"
+                            sx={{gridColumn: "span 4"}}
+                            >Registrar Mascota</Typography>
+
                             <TextField
-                            label="Nombre de la mascota"
+                            label="Nombre"
                             onBlur= {handleBlur}
                             onChange ={handleChange}
-                            value= {values.location}
-                            name="petname"
-                            error={Boolean(touched.location)&& Boolean(errors.location)}
-                            helperText={touched.location && errors.location}
+                            value= {values.petName}
+                            name="petName"
+                            error={Boolean(touched.petName)&& Boolean(errors.petName)}
+                            helperText={touched.petName && errors.petName}
+                            sx={{gridColumn: "span 2"}}
+                            />
+
+                            <TextField
+                            label="Edad"
+                            onBlur= {handleBlur}
+                            onChange ={handleChange}
+                            value= {values.petAge}
+                            name="petAge"
+                            error={Boolean(touched.petAge)&& Boolean(errors.petAge)}
+                            helperText={touched.petAge && errors.petAge}
+                            sx={{gridColumn: "span 2"}}
+                            />
+
+                            <TextField
+                            label="Sexo"
+                            onBlur= {handleBlur}
+                            onChange ={handleChange}
+                            value= {values.petGender}
+                            name="petGender"
+                            error={Boolean(touched.petGender)&& Boolean(errors.petGender)}
+                            helperText={touched.petGender && errors.petGender}
+                            sx={{gridColumn: "span 2"}}
+                            />
+
+                            <TextField
+                            label="Tamaño"
+                            onBlur= {handleBlur}
+                            onChange ={handleChange}
+                            value= {values.petSize}
+                            name="petSize"
+                            error={Boolean(touched.petSize)&& Boolean(errors.petSize)}
+                            helperText={touched.petSize && errors.petSize}
+                            sx={{gridColumn: "span 2"}}
+                            />
+
+                            <TextField
+                            label="Descripción"
+                            onBlur= {handleBlur}
+                            onChange ={handleChange}
+                            value= {values.petDescription}
+                            name="petDescription"
+                            error={Boolean(touched.petDescription)&& Boolean(errors.petDescription)}
+                            helperText={touched.petDescription && errors.petDescription}
                             sx={{gridColumn: "span 4"}}
                             />
+
                             <Box
                             gridColumn= "span 4"
                             border= {`1px solid ${palette.neutral.medium}`}

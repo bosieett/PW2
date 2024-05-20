@@ -43,9 +43,6 @@ const PetsPage = () =>{
             gap= "2rem"
             justifyContent="center"
             >
-                <Box flexBasis={isNonMobileScreens ? "26%": undefined}>
-                    <UserWidget userId={userId} picturePath={user.picturePath}/>
-                </Box>
                 <Box
                  flexBasis={isNonMobileScreens ? "42%" : undefined}
                  mt={isNonMobileScreens ? undefined : "2rem"}
