@@ -25,6 +25,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import AlertCustom from "./AlertCustom";
+import Combobox from "components/ComboBox";
 
 const MyPostWidget = ({picturePath, isProfile = false}) => {
     const dispatch = useDispatch();
@@ -112,6 +113,10 @@ const MyPostWidget = ({picturePath, isProfile = false}) => {
                 }}
                />
                </FlexBetween>
+               
+               <Divider sx={{ margin: "1.25rem 0"}}/>
+
+               <Combobox></Combobox>
                {isImage && (
                 <Box
                     border={`1px solid ${medium}`}
@@ -170,27 +175,6 @@ const MyPostWidget = ({picturePath, isProfile = false}) => {
                        Imagen 
                     </Typography>
                 </FlexBetween>
-
-               {isNonMobileScreens ? (
-                <>
-                <FlexBetween gap="0.25rem">
-                    <GifBoxOutlined sx={{ color: mediumMain}}/>
-                    <Typography color={mediumMain}>Clip</Typography>
-                </FlexBetween>
-
-                <FlexBetween gap="0.25rem">
-                    <AttachFileOutlined sx={{ color: mediumMain}}/>
-                    <Typography color={mediumMain}>Adjuntar</Typography>
-                </FlexBetween>
-
-                <FlexBetween gap="0.25rem">
-                    <MicOutlined sx={{ color: mediumMain}}/>
-                    <Typography color={mediumMain}>Audio</Typography>
-                </FlexBetween>
-                </>
-               ) : (<FlexBetween gap="0.25rem">
-                 <MoreHorizOutlined sx={{ color:mediumMain}}/>
-                 </FlexBetween>)}
 
                <Button
                disable={!post}
