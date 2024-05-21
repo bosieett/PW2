@@ -14,6 +14,8 @@ import Friend from 'components/Friend';
 import WidgetWrapper from 'components/WidgetWrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPost } from 'state';
+import ConfirmationDialog from 'components/ConfirmationDialog';
+import AlertCustom from './AlertCustom';
 
 const PostWidget = ({
     postId,
@@ -71,6 +73,35 @@ const PostWidget = ({
         setEditedDescription(description);
     };
 
+
+    /* Confirmation Dialog */
+    const [open, setOpen] = useState(false);
+    const [confirmationConfig, setConfirmationConfig] = useState({ title: '', description: '', handleConfirm: () => {} });
+    
+    const handleClickOpen = (title, description, handleConfirm) => {
+        setConfirmationConfig({ title, description, handleConfirm });
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    /* Alert */
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertSeverity, setAlertSeverity] = useState("success");
+
+    const handleOpenAlert = (message, severity) => {
+        setAlertMessage(message);
+        setAlertSeverity(severity);
+        setAlertOpen(true);
+    };
+
+    const handleCloseAlert = () => {
+        setAlertOpen(false);
+    };
+
     const handleDelete = async () => {
         try {
             const response = await fetch(`http://localhost:3001/posts/${postId}`, {
@@ -81,16 +112,14 @@ const PostWidget = ({
             });
     
             if (response.ok) {
-                // La publicación se eliminó correctamente
-                // Puedes redirigir a una página de confirmación o actualizar la lista de publicaciones
-                console.log("Publicación eliminada correctamente");
+                handleOpenAlert("Publicación eliminada con éxito!", "success");
             } else {
-                // Manejar el caso en que no se pueda eliminar la publicación
-                console.error("Error al eliminar la publicación");
+                handleOpenAlert("Error al eliminar la publicación", "error");
             }
         } catch (error) {
-            console.error("Error al procesar la solicitud de eliminación:", error);
+            handleOpenAlert("Error al procesar la solicitud de eliminación: "+error, "error");
         }
+        setOpen(false);
     };
 
     return (
@@ -161,7 +190,7 @@ const PostWidget = ({
                     </IconButton>
                 )) : ""}
 
-            {postUserId===loggedInUserId ? (<IconButton onClick={handleDelete} color="error">
+            {postUserId===loggedInUserId ? (<IconButton onClick={() => handleClickOpen('¿Seguro que deseas borrar su registro?', 'No podrás ver hacer más publicaciones, ni ver en tu perfil a este cachorro.', ()=>handleDelete())} color="error">
     <DeleteOutlined />
 </IconButton>): ""}
             </FlexBetween>
@@ -179,6 +208,18 @@ const PostWidget = ({
                 </Box>
             )}
 
+              <ConfirmationDialog 
+                open={open} 
+                handleClose={handleClose} 
+                handleConfirm={confirmationConfig.handleConfirm} 
+                title={confirmationConfig.title} 
+                description={confirmationConfig.description} 
+            />
+            <AlertCustom
+              open={alertOpen}
+              message={alertMessage}
+              severity={alertSeverity}
+              handleClose={handleCloseAlert}></AlertCustom>
         </WidgetWrapper>
     );
 };

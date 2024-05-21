@@ -26,8 +26,7 @@ export const petRegister = async (req, res) =>{
                 petSize,
                 petGender,
                 petDescription,
-                picturePath,
-                isAdopted: false
+                picturePath
             }
         );
         const savedPet = await newPet.save();
@@ -42,7 +41,7 @@ export const petRegister = async (req, res) =>{
 export const getUserPets = async (req, res) =>{
     try {
         const {id} = req.params;
-        const pets = await Pet.find({userId: id}).sort({createdAt: -1});
+        const pets = await Pet.find({userId: id, activo: true}).sort({createdAt: -1});
         res.status(200).json(pets);
     } catch (err) {
         res.status(404).json({message:err.message});
@@ -59,11 +58,31 @@ export const setAdopted = async(req, res) => {
 
         await pet.save();
 
-        const pets = await Pet.find({ userId: pet.userId}).sort({createdAt: -1});
+        const pets = await Pet.find({ userId: pet.userId, activo: true}).sort({createdAt: -1});
 
         res.status(200).json(pets);
 
     } catch (err) {
         res.status(404).json({message: err.message})
+    }
+}
+
+/* DELETE */
+export const deletePet = async(req, res) => {
+    try{
+        const {id} = req.params;
+        
+        const pet = await Pet.findById(id);
+        
+        pet.activo=false;
+
+        await pet.save();
+
+        const pets = await Pet.find({ userId: pet.userId, activo: true}).sort({createdAt: -1});
+
+        res.status(200).json(pets);
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 }

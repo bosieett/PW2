@@ -31,7 +31,14 @@ const petSchema = mongoose.Schema({
     },
     petDescription: String,
     picturePath: String,
-    isAdopted: Boolean,
+    isAdopted: { 
+        type: Boolean,
+        default: false
+    },
+    activo: {
+        type: Boolean,
+        default: true 
+    },
 },
 { timestamps: true }
 );

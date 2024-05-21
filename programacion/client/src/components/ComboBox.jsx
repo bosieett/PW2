@@ -3,7 +3,7 @@ import { setPets } from "state";
 import { useSelector, useDispatch } from "react-redux";
 import { FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 
-const Combobox = () => {
+const Combobox = ({ onValueChange }) => {
     const dispatch = useDispatch();
     
     const {_id} = useSelector((state) => state.user);
@@ -24,10 +24,11 @@ const Combobox = () => {
         getUserPets();
     }, []); //eslint-disable-line react-hooks/exhaustive-deps
     
-    const [selectedValue, setSelectedValue] = useState('');
+    const [selectedValue, setSelectedValue] = useState(-1);
 
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
+        onValueChange(event.target.value);
     };
 
     return (
@@ -41,12 +42,13 @@ const Combobox = () => {
                     label="Opción"
                     onChange={handleChange}
                 >
+                <MenuItem value={-1}>Seleccionar</MenuItem>
                      {pets.map(
             ({
             _id,
             petName
         }) => (
-                    <MenuItem value={_id}>{petName}</MenuItem>
+                    <MenuItem key={_id} value={_id}>{petName}</MenuItem>
         ))}
                 </Select>
             </FormControl>

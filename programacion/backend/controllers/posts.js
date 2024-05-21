@@ -1,16 +1,20 @@
+import Pet from "../models/Pets.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 
 /* CREATE */
 export const createPost = async (req, res) => {
     try {
-        const { userId, description, picturePath} = req.body;
+        const { userId, description, picturePath, petId} = req.body;
         const user = await User.findById(userId);
+        const pet = await Pet.findById(petId);
         const newPost = new Post({
             userId,
             firstName: user.firstName,
             lastName: user.lastName,
             location: user.location,
+            petId,
+            petName: pet.petName,
             description,
             userPicturePath: user.picturePath,
             picturePath,
@@ -70,5 +74,19 @@ export const likePost = async (req, res) =>{
         res.status(200).json(updatedPost);
     } catch (err) {
         res.status(404).json({message: err.message});
+    }
+}
+
+/* DELETE */
+export const deletePost = async(req, res) => {
+    try{
+        const {id} = req.params;
+        
+        await Post.findByIdAndDelete(id);
+
+        res.status(200).json();
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 }

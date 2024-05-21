@@ -1,11 +1,7 @@
 import {
     EditOutlined,
     DeleteOutlined,
-    AttachFileOutlined,
-    GifBoxOutlined,
     ImageOutlined,
-    MicOutlined,
-    MoreHorizOutlined,
 } from "@mui/icons-material";
 import {
     Box, 
@@ -15,7 +11,6 @@ import {
     useTheme,
     Button,
     IconButton,
-    useMediaQuery 
 } from "@mui//material";
 import FlexBetween from "components/FlexBetween";
 import Dropzone from "react-dropzone";
@@ -50,15 +45,21 @@ const MyPostWidget = ({picturePath, isProfile = false}) => {
     const { palette } = useTheme();
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const mediumMain = palette.neutral.mediumMain;
     const medium = palette.neutral.medium;
 
+    const [selectedPetId, setSelectedPetId] = useState("");
+
+    const handleValueChange = (value) => {
+        setSelectedPetId(value);
+    };
+
     const handlePost = async () => {
-        
+        if(selectedPetId && selectedPetId != -1){
         if(image || post){
         const formData = new FormData();
         formData.append("userId", _id);
+        formData.append("petId", selectedPetId);
         formData.append("description", post);
         if (image){
             formData.append("picture", image);
@@ -93,6 +94,8 @@ const MyPostWidget = ({picturePath, isProfile = false}) => {
     }
     else{
         handleOpenAlert("Ingresa un archivo o texto al cuerpo de tu publicación", "warning")
+    }}else{
+        handleOpenAlert("Necesitas seleccionar una mascota", "warning")
     }
     };
 
@@ -116,7 +119,7 @@ const MyPostWidget = ({picturePath, isProfile = false}) => {
                
                <Divider sx={{ margin: "1.25rem 0"}}/>
 
-               <Combobox></Combobox>
+               <Combobox onValueChange={handleValueChange}></Combobox>
                {isImage && (
                 <Box
                     border={`1px solid ${medium}`}
@@ -185,7 +188,7 @@ const MyPostWidget = ({picturePath, isProfile = false}) => {
                 borderRadius: "3rem"
                }}
                >
-                POST
+                POSTEAR
                </Button>
                </FlexBetween>
               <AlertCustom

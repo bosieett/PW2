@@ -67,8 +67,23 @@ const PetsProfilePage = () =>{
             headers: {Authorization: `Bearer ${token}` }
 
         });
+        const data = await response.json();
+
+        dispatch(setPets({pets: data}))
         setOpen(false);
-        getUserPets();
+    };
+
+    const handleDelete = async (petId) => {
+        
+        const response = await fetch(`http://localhost:3001/pets/${petId}`, {
+            method: "DELETE",
+            headers: {Authorization: `Bearer ${token}` }
+
+        });
+        const data = await response.json();
+
+        dispatch(setPets({pets: data}))
+        setOpen(false);
     };
 
 
@@ -185,7 +200,7 @@ const PetsProfilePage = () =>{
                         </Button>
                     )}
                 </Box>
-                        <IconButton onClick={handleAdoptation} color="error">
+                        <IconButton onClick={() => handleClickOpen('¿Seguro que deseas borrar su registro?', 'No podrás ver hacer más publicaciones, ni ver en tu perfil a este cachorro.', ()=>handleDelete(_id))} color="error">
                             <DeleteOutlined />
                         </IconButton>
                 </FlexBetween>
