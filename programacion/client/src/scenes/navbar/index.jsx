@@ -22,7 +22,7 @@ import {
 } from "@mui/icons-material";
 import PetsIcon from '@mui/icons-material/Pets';
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout } from "state";
+import { setMode, setLogout, resetPosts } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
 
@@ -32,7 +32,6 @@ const Navbar = () =>{
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    
     const theme = useTheme();
     const neutralLight = theme.palette.neutral.light;
     const dark = theme.palette.neutral.dark;

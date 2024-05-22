@@ -8,12 +8,13 @@ import {
     SaveOutlined,
     CancelOutlined
 } from '@mui/icons-material';
-import { Box, Divider, IconButton, Typography, useTheme, TextField } from '@mui/material';
+import { Box, Divider, IconButton, Typography, useTheme, TextField, Button } from '@mui/material';
 import FlexBetween from 'components/FlexBetween';
 import Friend from 'components/Friend';
 import WidgetWrapper from 'components/WidgetWrapper';
+import SendIcon from '@mui/icons-material/Send';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPost } from 'state';
+import { delPost, setPost } from 'state';
 import ConfirmationDialog from 'components/ConfirmationDialog';
 import AlertCustom from './AlertCustom';
 
@@ -28,6 +29,7 @@ const PostWidget = ({
     likes,
     comments,
 }) => {
+    const [newComment, setNewComment] = useState('');
     const [isComments, setIsComments] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editedDescription, setEditedDescription] = useState(description);
@@ -36,6 +38,7 @@ const PostWidget = ({
     const token = useSelector((state) => state.token);
     const loggedInUserId = useSelector((state) => state.user._id);
     const isLiked = Boolean(likes[loggedInUserId]);
+    const descripcion = description;
     const likeCount = Object.keys(likes).length;
 
     const { palette } = useTheme();
@@ -56,20 +59,48 @@ const PostWidget = ({
         dispatch(setPost({ post: updatedPost }));
     };
 
+    const patchDesc = async () => {
+    try {
+        const response = await fetch(`http://localhost:3001/posts/${postId}`, {
+            method: 'PATCH',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ description: editedDescription }),
+        });
+
+        if (response.ok) {
+            const updatedPost = await response.json();
+            dispatch(setPost({ post: updatedPost }));
+            setEditedDescription(updatedPost.description);
+            setIsEditing(false);
+        } else {
+            console.error('Error al actualizar la descripción');
+        }
+    } catch (error) {
+        console.error('Error en la solicitud PATCH:', error);
+    }
+};
+
+
+    const handleCommentChange = (e) => {
+        setNewComment(e.target.value);
+    };
+
+    const handleCommentSubmit = () => {
+        // Aquí puedes enviar el nuevo comentario al backend o actualizar la propiedad del post
+        console.log('Nuevo comentario:', newComment);
+        setNewComment(''); // Limpiar el campo de comentario después de enviarlo
+    };
+
     const handleEditClick = () => {
         setIsEditing(true);
     };
 
-    const handleSaveEdit = () => {
-        setIsEditing(false);
-        // Aquí puedes enviar los datos editados al servidor o realizar cualquier acción necesaria
-        // Por simplicidad, solo actualizo el estado en este ejemplo
-        setEditedDescription(editedDescription);
-    };
-
     const handleCancelEdit = () => {
         setIsEditing(false);
-        // Restaurar la descripción original al cancelar la edición
+        
         setEditedDescription(description);
     };
 
@@ -113,6 +144,8 @@ const PostWidget = ({
     
             if (response.ok) {
                 handleOpenAlert("Publicación eliminada con éxito!", "success");
+                const deletedPost = await response.json();
+                dispatch(delPost({ post: deletedPost }))
             } else {
                 handleOpenAlert("Error al eliminar la publicación", "error");
             }
@@ -138,7 +171,7 @@ const PostWidget = ({
                 />
             ) : (
                 <Typography color={main} sx={{ mt: '1rem' }}>
-                    {description}
+                    {descripcion}
                 </Typography>
             )}
 
@@ -175,7 +208,7 @@ const PostWidget = ({
                 <FlexBetween gap="0.3rem">
                 {/* Botón de guardar edición */}
                 {isEditing && (
-                    <IconButton onClick={handleSaveEdit}>
+                    <IconButton onClick={patchDesc}>
                         <SaveOutlined />
                     </IconButton>
                 )}
@@ -208,6 +241,20 @@ const PostWidget = ({
                 </Box>
             )}
 
+            <FlexBetween gap="0.3rem">
+             {/* Agregar el campo de texto para el nuevo comentario */}
+            <TextField
+                label="Escribe un comentario"
+                variant="outlined"
+                value={newComment}
+                onChange={handleCommentChange}
+                fullWidth
+            />
+
+            {/* Agregar el botón para enviar el comentario */}
+            <SendIcon onClick={handleCommentSubmit}>
+            </SendIcon>
+</FlexBetween>
               <ConfirmationDialog 
                 open={open} 
                 handleClose={handleClose} 

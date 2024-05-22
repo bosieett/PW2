@@ -55,7 +55,7 @@ const MyPostWidget = ({picturePath, isProfile = false}) => {
     };
 
     const handlePost = async () => {
-        if(selectedPetId && selectedPetId != -1){
+        if(selectedPetId && selectedPetId !== -1){
         if(image || post){
         const formData = new FormData();
         formData.append("userId", _id);

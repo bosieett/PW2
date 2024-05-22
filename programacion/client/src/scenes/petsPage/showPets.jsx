@@ -59,6 +59,26 @@ const PetsProfilePage = () =>{
     const handleClose = () => {
         setOpen(false);
     };
+
+    const sendMail = async (to, pet) => {
+    try {
+        const response = await fetch('http://localhost:3001/email/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ to, pet }),
+        });
+
+        if (response.ok) {
+            console.log('Correo enviado correctamente');
+        } else {
+            console.error('Error al enviar el correo');
+        }
+    } catch (error) {
+        console.error('Error en la solicitud de envío de correo:', error);
+    }
+};
     
     const handleAdoptation = async (petId) => {
         
@@ -124,7 +144,7 @@ const PetsProfilePage = () =>{
             isAdopted,
             
         }) => (
-            userId == loggedUser._id ? (
+            userId === loggedUser._id ? (
             <>
             <Box height="500px" width="300px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" sx={{gridColumn: "span 1"}}>
             <WidgetWrapper>
@@ -278,7 +298,7 @@ const PetsProfilePage = () =>{
                             ¡Encontró un hogar!
                         </Typography>
                     ) : (
-                        <Button variant="contained" endIcon={<PetsIcon />}>
+                        <Button variant="contained" onClick={sendMail(user.email, petName)} endIcon={<PetsIcon />}>
                             Adoptar
                         </Button>
                     )}

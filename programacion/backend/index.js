@@ -16,6 +16,7 @@ import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js"
 import { verifyToken } from "./middleware/auth.js";
 import { petRegister } from "./controllers/pets.js";
+import { sendEmail } from "./controllers/email.js";
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -52,6 +53,17 @@ app.use("/auth", authRoutes)
 app.use("/users", userRoutes);
 app.use("/pets", petRoutes);
 app.use("/posts", postRoutes);
+
+app.post('/email/send', async (req, res) => {
+    const { to, pet } = req.body;
+
+    try {
+        await sendEmail(to, pet);
+        res.status(200).json({ message: 'Correo enviado correctamente' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al enviar el correo' });
+    }
+});
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;

@@ -34,17 +34,22 @@ export const authSlice = createSlice({
             state.posts = action.payload.posts;
         },
         setPost: (state, action) => {
-            const updatedPosts = state.posts.map((post) =>{
-                if(post._id === action.payload.post._id) return action.payload.post;
-                return post;
-            })
-            state.posts = updatedPosts;
+            const updatedPost = action.payload.post;
+            const index = state.posts.findIndex(post => post._id === updatedPost._id);
+            if (index !== -1) {
+                state.posts[index] = updatedPost;
+            }
+        },
+        delPost: (state, action) => {
+            const deletedPost = action.payload.post;
+            state.posts = state.posts.filter(post => post._id !== deletedPost._id);
         },
         setPets: (state, action) => {
             state.pets = action.payload.pets;
-        }
+        },
+       
     }
 })
 
-export const { setMode, setLogin , setLogout , setFriends, setPosts, setPost, setPets} = authSlice.actions;
+export const { setMode, setLogin , setLogout , setFriends, setPosts, setPost, delPost, setPets} = authSlice.actions;
 export default authSlice.reducer;
