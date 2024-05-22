@@ -8,11 +8,12 @@ import {
     SaveOutlined,
     CancelOutlined
 } from '@mui/icons-material';
-import { Box, Divider, IconButton, Typography, useTheme, TextField, Button } from '@mui/material';
+import { Box, Divider, IconButton, Typography, useTheme, TextField } from '@mui/material';
 import FlexBetween from 'components/FlexBetween';
 import Friend from 'components/Friend';
 import WidgetWrapper from 'components/WidgetWrapper';
 import SendIcon from '@mui/icons-material/Send';
+import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux';
 import { delPost, setPost } from 'state';
 import ConfirmationDialog from 'components/ConfirmationDialog';
@@ -29,7 +30,7 @@ const PostWidget = ({
     likes,
     comments,
 }) => {
-    const [newComment, setNewComment] = useState('');
+    const [commentText, setCommentText] = useState('');
     const [isComments, setIsComments] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editedDescription, setEditedDescription] = useState(description);
@@ -83,16 +84,28 @@ const PostWidget = ({
     }
 };
 
+const handleAddComment = async () => {
+    if (commentText.trim()) {
+        try {
+            const response = await fetch(`http://localhost:3001/posts/${postId}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ userId: loggedInUserId, text: commentText }),
+            });
 
-    const handleCommentChange = (e) => {
-        setNewComment(e.target.value);
-    };
-
-    const handleCommentSubmit = () => {
-        // Aquí puedes enviar el nuevo comentario al backend o actualizar la propiedad del post
-        console.log('Nuevo comentario:', newComment);
-        setNewComment(''); // Limpiar el campo de comentario después de enviarlo
-    };
+            if (response.ok) {
+                const updatedPost = await response.json();
+                dispatch(setPost({ post: updatedPost }));
+                setCommentText(''); // Clear the comment input
+            }
+        } catch (err) {
+            console.error('Error adding comment:', err);
+        }
+    }
+};
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -153,6 +166,29 @@ const PostWidget = ({
             handleOpenAlert("Error al procesar la solicitud de eliminación: "+error, "error");
         }
         setOpen(false);
+    };
+
+    const handleDeleteComment = async (commentId) => {
+        try {
+            const response = await fetch(`http://localhost:3001/posts/${postId}/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.ok) {
+                const updatedPost = await response.json();
+                dispatch(setPost({ post: updatedPost }));
+                handleOpenAlert('Comentario eliminado con éxito!', 'success');
+            } else {
+                handleOpenAlert('Error al eliminar el comentario', 'error');
+            }
+        } catch (error) {
+            handleOpenAlert('Error al procesar la solicitud de eliminación: ' + error, 'error');
+        }
+        handleClose();
     };
 
     return (
@@ -223,7 +259,7 @@ const PostWidget = ({
                     </IconButton>
                 )) : ""}
 
-            {postUserId===loggedInUserId ? (<IconButton onClick={() => handleClickOpen('¿Seguro que deseas borrar su registro?', 'No podrás ver hacer más publicaciones, ni ver en tu perfil a este cachorro.', ()=>handleDelete())} color="error">
+            {postUserId===loggedInUserId ? (<IconButton onClick={() => handleClickOpen('¿Seguro que deseas borrar la publicación?', 'No se podrá recuperar la publicación eliminada.', ()=>handleDelete())} color="error">
     <DeleteOutlined />
 </IconButton>): ""}
             </FlexBetween>
@@ -232,9 +268,23 @@ const PostWidget = ({
             {isComments && (
                 <Box mt="0.5rem">
                     {comments.map((comment, i) => (
-                        <Box key={`${name}-${i}`}>
+                        <Box key={comment._id}>
                             <Divider />
-                            <Typography sx={{ color: main, m: '0.5rem 0', pl: '1rem' }}>{comment}</Typography>
+                            <FlexBetween>
+                            <Typography sx={{ color: main, m: '0.5rem 0', pl: '1rem' }}>{comment.text}</Typography>
+                            {comment.userId === loggedInUserId && (
+                    <IconButton
+                        onClick={() => handleClickOpen(
+                            '¿Seguro que deseas borrar este comentario?',
+                            'No podrás recuperar este comentario una vez eliminado.',
+                            () => handleDeleteComment(comment._id) // Aquí debes definir la función handleDeleteComment para eliminar el comentario
+                        )}
+                        color="error"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                )}
+                </FlexBetween>
                         </Box>
                     ))}
                     <Divider />
@@ -246,14 +296,15 @@ const PostWidget = ({
             <TextField
                 label="Escribe un comentario"
                 variant="outlined"
-                value={newComment}
-                onChange={handleCommentChange}
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
                 fullWidth
             />
 
             {/* Agregar el botón para enviar el comentario */}
-            <SendIcon onClick={handleCommentSubmit}>
-            </SendIcon>
+            <IconButton onClick={handleAddComment}>
+                <SendIcon/>
+            </IconButton>
 </FlexBetween>
               <ConfirmationDialog 
                 open={open} 

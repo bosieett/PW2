@@ -96,17 +96,19 @@ export const updatePost = async (req, res) =>{
 
 export const updateComments = async (req, res) =>{
      try {
-        const { id } = req.params;
-        const { comments } = req.body;
-        const post = await Post.findById(id);
-        post.comments.push(comments);
-        const updatedPost = await Post.findByIdAndUpdate(
-            id,
-            {comments: post.comments},
-            { new: true}
-        )
+        const { postId } = req.params;
+        const { userId, text } = req.body;
 
-        res.status(200).json(updatedPost);
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        const newComment = { userId, text };
+        post.comments.push(newComment);
+        await post.save();
+
+        res.status(200).json(post);
     } catch (err) {
         res.status(404).json({message: err.message});
     }
@@ -121,6 +123,24 @@ export const deletePost = async(req, res) => {
 
         res.status(200).json(deletedPost);
 
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+export const deleteComment = async(req, res) => {
+    try {
+        const { id, commentId } = req.params;
+        const post = await Post.findById(id);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post no encontrado' });
+        }
+
+        post.comments = post.comments.filter(comment => comment._id.toString() !== commentId);
+        await post.save();
+
+        res.status(200).json(post);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

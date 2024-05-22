@@ -9,6 +9,7 @@ import { createTheme } from "@mui/material";
 import { themeSettings } from "theme";
 import PetsPage from "scenes/petsPage";
 import PetsProfilePage from "scenes/petsPage/showPets";
+import ProfilePet from "scenes/profilePet";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
               <Route path="/profile/:userId" element={isAuth ? <ProfilePage />: <Navigate to = "/"/>} />
               <Route path="/pets" element={isAuth ? <PetsProfilePage />: <Navigate to = "/"/>} />
               <Route path="/pets/:userId" element={isAuth ? <PetsPage />: <Navigate to = "/"/>} />
+              <Route path="/petsProfile/:petId" element={isAuth ? <ProfilePet />: <Navigate to = "/"/>} />
             </Routes>
         </ThemeProvider>
       </BrowserRouter>

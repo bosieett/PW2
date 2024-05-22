@@ -1,4 +1,5 @@
 import Pet from "../models/Pets.js";
+import Post from "../models/Post.js";
 import User from "../models/User.js";
 
 /* REGISTER PET */
@@ -43,6 +44,29 @@ export const getUserPets = async (req, res) =>{
         const {id} = req.params;
         const pets = await Pet.find({userId: id, activo: true}).sort({createdAt: -1});
         res.status(200).json(pets);
+    } catch (err) {
+        res.status(404).json({message:err.message});
+    }
+}
+
+export const getPet = async (req, res) =>{
+    try {
+        const {petId} = req.params;
+        console.log(req.params)
+
+        const pet = await Pet.findById(petId);
+        console.log(pet)
+        res.status(200).json(pet);
+    } catch (err) {
+        res.status(404).json({message:err.message});
+    }
+}
+
+export const getPetPosts = async (req, res) =>{
+    try {
+        const {petId} = req.params;
+        const posts = await Post.find({petId});
+        res.status(200).json(posts);
     } catch (err) {
         res.status(404).json({message:err.message});
     }

@@ -12,9 +12,11 @@ import {
     DeleteOutlined
 } from '@mui/icons-material';
 import ConfirmationDialog from "components/ConfirmationDialog";
+import { useNavigate } from "react-router-dom";
 
 const PetsProfilePage = () =>{
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [user, setUser] = useState(null);
     const loggedUser = useSelector((state) => state.user);
@@ -62,12 +64,19 @@ const PetsProfilePage = () =>{
 
     const sendMail = async (to, pet) => {
     try {
+        const responseU =  await fetch(`http://localhost:3001/users/${to}`, {
+            method: "GET",
+            headers: {Authorization: `Bearer ${token}`}
+        })
+    
+        const { email } = await responseU.json();
+
         const response = await fetch('http://localhost:3001/email/send', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ to, pet }),
+            body: JSON.stringify({ email, pet }),
         });
 
         if (response.ok) {
@@ -149,6 +158,7 @@ const PetsProfilePage = () =>{
             <Box height="500px" width="300px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" sx={{gridColumn: "span 1"}}>
             <WidgetWrapper>
         <CardMedia
+          onClick={()=>navigate(`/petsProfile/${_id}`)}
           component="img"
           height="140"
           image={`http://localhost:3001/assets/${picturePath}`}
@@ -298,7 +308,7 @@ const PetsProfilePage = () =>{
                             ¡Encontró un hogar!
                         </Typography>
                     ) : (
-                        <Button variant="contained" onClick={sendMail(user.email, petName)} endIcon={<PetsIcon />}>
+                        <Button variant="contained" onClick={sendMail(userId, petName)} endIcon={<PetsIcon />}>
                             Adoptar
                         </Button>
                     )}
