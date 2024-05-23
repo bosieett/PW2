@@ -52,7 +52,7 @@ export const authSlice = createSlice({
         },
         setUpdPet: (state, action) => {
             const updatedPet = action.payload.pet;
-            const index = state.pets.findIndex(pet => pet._id === pet._id);
+            const index = state.pets.findIndex(pet => pet._id === updatedPet._id);
             if (index !== -1) {
                 state.pets[index] = updatedPet;
             }
