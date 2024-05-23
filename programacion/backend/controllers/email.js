@@ -12,11 +12,12 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-export const sendEmail = async (to, pet) => {
+export const sendEmail = async (to, pet, nombreDueno, nombreAdoptar, emailAdoptar) => {
     // Configuración del correo
 let mailOptions = {
     from: 'ADOPET <albertosco77@gmail.com>',
-    to: "kevierto@gmail.com",
+    subject: 'Alguien está buscando a '+pet,
+    to: to,
     html: `<html lang="es" class="translated-ltr"><head><style>
     .clearfix:after {
       content: "";
@@ -185,8 +186,8 @@ let mailOptions = {
             </thead>
             <tbody>
               <tr>
-                <td class="service"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Saludos, Nombre del que quiere dar en adopcion</font></font></td>
-                <td class="desc"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">El usuario NOMBRE (correo) quiere adoptar a ${pet} manténgase en contacto para llegar a un acuerdo.</font></font></td>
+                <td class="service"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Saludos, ${nombreDueno}</font></font></td>
+                <td class="desc"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">El usuario ${nombreAdoptar} (${emailAdoptar}) quiere adoptar a ${pet} manténgase en contacto para llegar a un acuerdo.</font></font></td>
                 <td class="unit"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">¡Gracias por utilizar nuestra página!</font></font></td>
                 <td class="qty"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font></font></td>
                 <td class="total"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font></font></td>

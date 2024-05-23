@@ -55,10 +55,10 @@ app.use("/pets", petRoutes);
 app.use("/posts", postRoutes);
 
 app.post('/email/send', async (req, res) => {
-    const { to, pet } = req.body;
+    const { to, pet, nombreDueno, nombreAdoptar, emailAdoptar } = req.body;
 
     try {
-        await sendEmail(to, pet);
+        await sendEmail(to, pet, nombreDueno, nombreAdoptar, emailAdoptar);
         res.status(200).json({ message: 'Correo enviado correctamente' });
     } catch (error) {
         res.status(500).json({ message: 'Error al enviar el correo' });

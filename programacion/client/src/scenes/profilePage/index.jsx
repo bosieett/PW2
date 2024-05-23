@@ -33,7 +33,7 @@ const ProfilePage = () =>{
     if (!user) return null;
 
     return <Box>
-        <Navbar/>
+        <Navbar userId={userId}/>
         <Box
             width="100%"
             padding="2rem 6%"

@@ -31,7 +31,7 @@ const PetsPage = () =>{
     if (!user) return null;
 
     return <Box>
-        <Navbar/>
+        <Navbar isPetPage/>
         <Box
             width="100%"
             padding="2rem 6%"

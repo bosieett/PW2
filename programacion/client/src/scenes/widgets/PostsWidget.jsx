@@ -49,6 +49,8 @@ const PostsWidget = ({userId, isProfile = false}) => {
             userPicturePath,
             likes,
             comments,
+            petName,
+            petId,
 
         }) => (
             <PostWidget
@@ -62,6 +64,8 @@ const PostsWidget = ({userId, isProfile = false}) => {
             userPicturePath = {userPicturePath}
             likes = {likes}
             comments = {comments}
+            petName = {petName}
+            petId = {petId}
             />
         )
 

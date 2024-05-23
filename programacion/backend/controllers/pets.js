@@ -71,20 +71,30 @@ export const getPetPosts = async (req, res) =>{
         res.status(404).json({message:err.message});
     }
 }
+export const getPetAndPosts = async (req, res) =>{
+    try {
+        const { pet, post } = req.query;
+        console.log(pet, post)
+        const regexPet = new RegExp(pet, 'i'); 
+        const regexPost = new RegExp(post, 'i'); 
+
+       
+        const animals = await Pet.find( { petName: regexPet, activo: true }).sort({createdAt: -1});
+        const posts = await Post.find({ description: regexPost }).sort({createdAt: -1});
+        res.status(200).json({ animals, posts });
+    } catch (err) {
+        res.status(404).json({message:err.message});
+    }
+}
 
 /* UPDATE */
 export const setAdopted = async(req, res) => {
     try {
         const {id} = req.params;
-        const pet = await Pet.findById(id);
-        
-        pet.isAdopted=true;
 
-        await pet.save();
+        const pet = await Pet.findByIdAndUpdate(id,{ isAdopted: true}, {new:true}).sort({createdAt: -1});
 
-        const pets = await Pet.find({ userId: pet.userId, activo: true}).sort({createdAt: -1});
-
-        res.status(200).json(pets);
+        res.status(200).json(pet);
 
     } catch (err) {
         res.status(404).json({message: err.message})

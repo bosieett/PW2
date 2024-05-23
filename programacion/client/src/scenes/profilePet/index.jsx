@@ -13,9 +13,8 @@ const ProfilePet = () => {
     const {petId} = useParams();
     
     return <>
-        <Navbar></Navbar>
+        <Navbar isPetPage/>
         <Container>
-            <CssBaseline />
             <AnimalProfile petId={petId} />
         </Container>
     </>

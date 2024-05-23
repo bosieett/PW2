@@ -1,14 +1,15 @@
 import express from "express";
 
 import { verifyToken } from "../middleware/auth.js";
-import { deletePet, getPet, getPetPosts, getUserPets, setAdopted } from "../controllers/pets.js";
+import { deletePet, getPet, getPetAndPosts, getPetPosts, getUserPets, setAdopted } from "../controllers/pets.js";
 
 const router = express.Router();
 
 /* READ */
+router.get("/postsSearch", verifyToken, getPetAndPosts);
 router.get("/user/:id", verifyToken, getUserPets);
 router.get("/:petId", verifyToken, getPet);
-router.get("/:petId/posts", verifyToken, getPetPosts);
+router.get("/posts/:petId", verifyToken, getPetPosts);
 
 /* UPDATE */
 router.patch("/:id", verifyToken, setAdopted);

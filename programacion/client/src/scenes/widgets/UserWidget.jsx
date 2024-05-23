@@ -10,6 +10,7 @@ import WidgetWrapper from  "components/WidgetWrapper";
 import { useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import PetsIcon from '@mui/icons-material/Pets';
 
 const UserWidget = ({ userId, picturePath})=> {
     const [user, setUser]= useState(null);
@@ -69,7 +70,7 @@ const UserWidget = ({ userId, picturePath})=> {
                     }} >
                     {firstName} {lastName}
                     </Typography>
-                    <Typography color={medium}> {friends.length} friends </Typography>
+                    <Typography color={medium}> {friends.length} amigos </Typography>
 
                 </Box>
             </FlexBetween>
@@ -89,6 +90,17 @@ const UserWidget = ({ userId, picturePath})=> {
                <WorkOutlineOutlined fontSize="large" sx={{color: main}}/>
                <Typography color= {medium}>{occupation}</Typography>
                 </Box> 
+            </Box>
+
+            <Divider/>
+
+            <Box p= "1rem 0">
+               <Box display= "flex" alignItems= "center" gap= "1rem" mb= "0.5rem"  sx={{cursor: "pointer"}}
+            onClick={() => navigate (`/pets/${user._id}`)}>
+               <PetsIcon fontSize="large" sx={{color: main}}/>
+               
+               <Typography color= {medium}>Mascotas</Typography>
+                </Box>
             </Box>
 
        </WidgetWrapper> 

@@ -1,31 +1,57 @@
-import { Box, useMediaQuery, Typography, Button, IconButton } from "@mui/material";
+import { Box, useMediaQuery, Typography, Button, IconButton, Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Navbar from "scenes/navbar";
-import UserWidget from "scenes/widgets/UserWidget";
 import WidgetWrapper from "components/WidgetWrapper";
-import { setPets } from "state";
+import { setPets, setUpdPet } from "state";
 import CardMedia from '@mui/material/CardMedia';
 import FlexBetween from "components/FlexBetween";
 import PetsIcon from '@mui/icons-material/Pets';
 import {
-    DeleteOutlined
+    DeleteOutlined,
+    LocationOnOutlined,
+    ManageAccountsOutlined,
+    WorkOutlineOutlined
 } from '@mui/icons-material';
 import ConfirmationDialog from "components/ConfirmationDialog";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useTheme } from "@emotion/react";
+import UserImage from "components/UserImage";
+import AlertCustom from "scenes/widgets/AlertCustom";
 
 const PetsProfilePage = () =>{
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [user, setUser] = useState(null);
+    const {userId} = useParams();
+    const location = useLocation();
     const loggedUser = useSelector((state) => state.user);
     const pets = useSelector((state) => state.pets);
     const token = useSelector((state) => state.token)
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)")
+    const {palette} = useTheme();
+    const dark = palette.neutral.dark;
+    const medium =  palette.neutral.medium;
+    const main = palette.neutral.main;
+
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertSeverity, setAlertSeverity] = useState("success");
+  
+    const handleOpenAlert = (message, severity) => {
+        setAlertMessage(message);
+        setAlertSeverity(severity);
+        setAlertOpen(true);
+    };
+  
+    const handleCloseAlert = () => {
+        setAlertOpen(false);
+    };
+  
 
     const getUserPets = async () => {
-        const response =  await fetch(`http://localhost:3001/pets/user/${loggedUser._id}`, {
+        const response =  await fetch(`http://localhost:3001/pets/user/${userId}`, {
             method: "GET",
             headers: {Authorization: `Bearer ${token}`}
         })
@@ -35,19 +61,20 @@ const PetsProfilePage = () =>{
     }
 
     const getUser = async () => {
-        const response =  await fetch(`http://localhost:3001/users/${loggedUser._id}`, {
+        const response =  await fetch(`http://localhost:3001/users/${userId}`, {
             method: "GET",
             headers: {Authorization: `Bearer ${token}`}
         })
 
         const data = await response.json();
+        console.log(data)
         setUser(data);
     }
 
     useEffect(() => {
         getUser();
         getUserPets();
-    }, []); //eslint-disable-line react-hooks/exhaustive-deps
+    }, [location.pathname]); //eslint-disable-line react-hooks/exhaustive-deps
 
 
     const [open, setOpen] = useState(false);
@@ -62,7 +89,7 @@ const PetsProfilePage = () =>{
         setOpen(false);
     };
 
-    const sendMail = async (to, pet) => {
+    const sendMail = async (to, petName) => {
     try {
         const responseU =  await fetch(`http://localhost:3001/users/${to}`, {
             method: "GET",
@@ -76,16 +103,17 @@ const PetsProfilePage = () =>{
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, pet }),
+            body: JSON.stringify({ email, pet: petName, nombreDueno: `${user.firstName} ${user.lastName}`, nombreAdoptar: `${loggedUser.firstName} ${loggedUser.lastName}`, emailAdoptar: loggedUser.email}),
         });
 
+        
         if (response.ok) {
-            console.log('Correo enviado correctamente');
+            handleOpenAlert("Se ha enviado un correo al dueño", "success");
         } else {
-            console.error('Error al enviar el correo');
+          handleOpenAlert("Error al enviar el correo", "error");
         }
     } catch (error) {
-        console.error('Error en la solicitud de envío de correo:', error);
+        handleOpenAlert('Error en la solicitud de envío de correo:' + error, "error");
     }
 };
     
@@ -98,7 +126,7 @@ const PetsProfilePage = () =>{
         });
         const data = await response.json();
 
-        dispatch(setPets({pets: data}))
+        dispatch(setUpdPet({pet: data}))
         setOpen(false);
     };
 
@@ -120,7 +148,7 @@ const PetsProfilePage = () =>{
     if (!user) return null;
 
     return <Box>
-        <Navbar/>
+        <Navbar isPetPage/>
         <Box
             width="100%"
             padding="2rem 6%"
@@ -129,7 +157,63 @@ const PetsProfilePage = () =>{
             justifyContent="center"
             >
                 <Box flexBasis={isNonMobileScreens ? "26%": undefined}>
-                    <UserWidget userId={loggedUser._id} picturePath={user.picturePath}/>
+                <WidgetWrapper>
+        {/*FIRST ROW*/}
+        <FlexBetween 
+        gap = "0.5 rem"
+        pb= "1.1rem"
+        onClick={() => navigate (`/profile/${userId}`)}
+        sx={{cursor: "pointer"}}
+        >
+            <FlexBetween gap= "1rem">
+                <UserImage image = {user.picturePath}/>
+                <Box>
+                    <Typography
+                    variant= "h4"
+                    color= {dark}
+                    fontWeight="500"
+                    sx={{
+                        "&;hover" : {
+                            color: palette.primary.light,
+                            cursor: "pointer"
+                        }
+                    }} >
+                    {user.firstName} {user.lastName}
+                    </Typography>
+                    <Typography color={medium}> {user.friends.length} amigos </Typography>
+
+                </Box>
+            </FlexBetween>
+            <ManageAccountsOutlined/>
+            </FlexBetween>
+
+            <Divider/>
+
+            {/*SECOND ROW*/}
+            <Box p= "1rem 0">
+               <Box display= "flex" alignItems= "center" gap= "1rem" mb= "0.5rem">
+               <LocationOnOutlined fontSize="large" sx={{color: main}}/>
+               <Typography color= {medium}>{user.location}</Typography>
+                </Box> 
+                
+               <Box display= "flex" alignItems= "center" gap= "1rem" >
+               <WorkOutlineOutlined fontSize="large" sx={{color: main}}/>
+               <Typography color= {medium}>{user.occupation}</Typography>
+                </Box> 
+            </Box>
+
+            <Divider/>
+
+            <Box p= "1rem 0">
+               <Box display= "flex" alignItems= "center" gap= "1rem" mb= "0.5rem"  sx={{cursor: "pointer"}}
+            onClick={() => navigate (`/pets/${user._id}`)}>
+               <PetsIcon fontSize="large" sx={{color: main}}/>
+               
+               <Typography color= {medium}>Mascotas</Typography>
+                </Box>
+            </Box>
+
+       </WidgetWrapper> 
                 </Box>
                 <Box
                      display= "grid"
@@ -163,7 +247,12 @@ const PetsProfilePage = () =>{
           height="140"
           image={`http://localhost:3001/assets/${picturePath}`}
           alt="pet picture"
-          sx={{borderRadius: "0.75rem"}}
+          sx={{borderRadius: "0.75rem",
+          cursor: "pointer",
+          "&:hover": {
+            transform: "scale(1.05)",
+            transition: "transform 0.2s",
+          }}}
         />
             <Typography
             textAlign="center"
@@ -241,12 +330,18 @@ const PetsProfilePage = () =>{
                 <>
             <Box height="500px" width="300px" flexBasis={isNonMobileScreens ? "26%": undefined} mr="2rem" sx={{gridColumn: "span 1"}}>
             <WidgetWrapper>
-        <CardMedia
+            <CardMedia
+          onClick={()=>navigate(`/petsProfile/${_id}`)}
           component="img"
           height="140"
           image={`http://localhost:3001/assets/${picturePath}`}
           alt="pet picture"
-          sx={{borderRadius: "0.75rem"}}
+          sx={{borderRadius: "0.75rem",
+          cursor: "pointer",
+          "&:hover": {
+            transform: "scale(1.05)",
+            transition: "transform 0.2s",
+          }}}
         />
             <Typography
             textAlign="center"
@@ -308,7 +403,7 @@ const PetsProfilePage = () =>{
                             ¡Encontró un hogar!
                         </Typography>
                     ) : (
-                        <Button variant="contained" onClick={sendMail(userId, petName)} endIcon={<PetsIcon />}>
+                        <Button variant="contained" onClick={()=>sendMail(userId, petName)} endIcon={<PetsIcon />}>
                             Adoptar
                         </Button>
                     )}
@@ -332,6 +427,11 @@ const PetsProfilePage = () =>{
                 title={confirmationConfig.title} 
                 description={confirmationConfig.description} 
             />
+             <AlertCustom
+        open={alertOpen}
+        message={alertMessage}
+        severity={alertSeverity}
+        handleClose={handleCloseAlert}></AlertCustom>
     </Box>
 }
 

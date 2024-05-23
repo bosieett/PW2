@@ -40,6 +40,39 @@ export const getFeedPosts = async(req, res) => {
     }
 }
 
+export const getSearchPosts = async(req, res) => {
+    try {
+        const { text } = req.query;
+        let post
+        if(text){
+            post = await Post.find({description: { $regex: text, $options: 'i' }}).sort({ createdAt: -1 });
+        }
+        else{
+            post = await Post.find().sort({ createdAt: -1 });
+        }
+        res.status(200).json(post);
+    } catch (err) {
+        console.log(err)
+        res.status(404).json({message: err.message});
+    }
+}
+
+export const getSearchPostsById = async(req, res) => {
+    try {
+        const { userId } = req.params;
+        const { text } = req.query;
+
+        let post = await Post.find({userId: userId}).sort({ createdAt: -1 });
+        if(text){
+            post = await Post.find({userId: userId,description: { $regex: text, $options: 'i' }}).sort({ createdAt: -1 });
+        }
+        console.log(post);
+        res.status(200).json(post);
+    } catch (err) {
+        res.status(404).json({message: err.message});
+    }
+}
+
 export const getUserPosts = async (req, res) =>{
      try {
         const { userId } = req.params;

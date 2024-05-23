@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { delPost, setPost } from 'state';
 import ConfirmationDialog from 'components/ConfirmationDialog';
 import AlertCustom from './AlertCustom';
+import { useNavigate } from 'react-router-dom';
 
 const PostWidget = ({
     postId,
@@ -29,12 +30,15 @@ const PostWidget = ({
     userPicturePath,
     likes,
     comments,
+    petName,
+    petId
 }) => {
     const [commentText, setCommentText] = useState('');
     const [isComments, setIsComments] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editedDescription, setEditedDescription] = useState(description);
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token);
     const loggedInUserId = useSelector((state) => state.user._id);
@@ -194,7 +198,13 @@ const handleAddComment = async () => {
     return (
         <WidgetWrapper m="2rem 0">
             <Friend friendId={postUserId} name={name} subtitle={location} userPicturePath={userPicturePath} />
-
+            <Typography color={main} 
+                   variant="h5"
+                   fontWeight="500"
+                   sx={{ mt: '1rem', cursor:"pointer"}}
+                   onClick={() => navigate (`/petsProfile/${petId}`)}>
+                    {petName}
+            </Typography>
             {isEditing ? (
                 <TextField
                     value={editedDescription}

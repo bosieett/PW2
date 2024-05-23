@@ -22,22 +22,45 @@ import {
 } from "@mui/icons-material";
 import PetsIcon from '@mui/icons-material/Pets';
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout } from "state";
+import { setMode, setLogout, setPosts } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
 
-const Navbar = () =>{
+const Navbar = ({userId, isPetPage}) =>{
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const token = useSelector((state) => state.token)
     const user = useSelector((state) => state.user);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const theme = useTheme();
     const neutralLight = theme.palette.neutral.light;
     const dark = theme.palette.neutral.dark;
     const background = theme.palette.background.default;
-    //const primaryLight = theme.palette.primary.light;
-    //const alt = theme.palette.background.alt;
+    const isUserProfile = userId;
+    console.log(isPetPage);
+ 
+    const searchPosts = async (text) => {
+        if(isUserProfile){
+            const query = text ? `?text=${text}` : '';
+            const response = await fetch(`http://localhost:3001/posts/search/${isUserProfile}${query}`, {
+                method: "GET",
+                headers: {Authorization: `Bearer ${token}` },
+                });
+                const data = await response.json();
+                dispatch(setPosts({ posts: data}));
+        }
+        else{
+            const query = text ? `?text=${text}` : '';
+            const response = await fetch(`http://localhost:3001/posts/search${query}`, {
+            method: "GET",
+            headers: {Authorization: `Bearer ${token}` },
+            });
+            const data = await response.json();
+            console.log(data);
+            dispatch(setPosts({ posts: data}));
+        }
+    };
 
     const fullName = `${user.firstName} ${user.lastName}`;
 
@@ -58,14 +81,28 @@ const Navbar = () =>{
             >
                 AD<PetsIcon sx={{ color: "#8e2020" }}/>PET
             </Typography>
-            {isNonMobileScreens && (
+            {isNonMobileScreens && !isPetPage && (
                 <FlexBetween backgroundColor={neutralLight} borderRadius="9px" gap="3rem" padding="0.1rem 1.5rem">
-                    <InputBase placeholder="Buscar..."/>
+                    <InputBase placeholder="Buscar..." onChange={(event)=>searchPosts(event.target.value)}/>
                     <IconButton>
                         <Search/>
                     </IconButton>
                 </FlexBetween>
             )}
+            <Typography 
+                fontWeight="bold" 
+                fontSize="clamp(0rem, 1rem, 1.25rem)" 
+                color="#ffecd9" 
+                onClick={() => navigate("/search")}
+                sx={{
+                    "&:hover": {
+                        color: "#d5c5b9",
+                        cursor: "pointer",
+                    },
+                }}
+            >
+                Busqueda avanzada
+            </Typography>
         </FlexBetween>
 
         {/* Desktop NAV */}
@@ -92,10 +129,10 @@ const Navbar = () =>{
                         <MenuItem value={fullName}>
                             <Typography>{fullName}</Typography>
                         </MenuItem>
-                        <MenuItem onClick={() => navigate (`/pets/${user._id}`)}>
+                        <MenuItem onClick={() => navigate (`/pets`)}>
                             <Typography>Dar de alta mascota</Typography>
                         </MenuItem>
-                        <MenuItem onClick={() => navigate (`/pets`)}>
+                        <MenuItem onClick={() => navigate (`/pets/${user._id}`)}>
                             <Typography>Mascotas</Typography>
                         </MenuItem>
                         <MenuItem onClick={()=> dispatch(setLogout())}>Salir</MenuItem>
