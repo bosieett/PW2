@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Container, CssBaseline } from '@mui/material';
+import React from 'react';
+import { Container } from '@mui/material';
 import AnimalProfile from 'scenes/widgets/PetProfileWidget';
 import Navbar from 'scenes/navbar';
-import { resetPet, setPet } from 'state';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 

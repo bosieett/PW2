@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Container, Box, TextField, Button, Typography, Grid, useMediaQuery, CardMedia, IconButton } from '@mui/material';
+import { Container, Box, TextField, Button, Typography, useMediaQuery, CardMedia, IconButton } from '@mui/material';
 import Navbar from 'scenes/navbar';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import WidgetWrapper from 'components/WidgetWrapper';
 import PostWidget from 'scenes/widgets/PostWidget';
 import { useNavigate } from 'react-router-dom';
