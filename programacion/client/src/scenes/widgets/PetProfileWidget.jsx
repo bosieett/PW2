@@ -61,7 +61,7 @@ const sendMail = async (to, petName) => {
           headers: {
               'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email, pet: petName, nombreDueno: `${pet.firstName} ${pet.lastName}`, nombreAdoptar: `${user.firstName} ${user.lastName}`, emailAdoptar: user.email}),
+          body: JSON.stringify({ to:email, pet: petName, nombreDueno: `${pet.firstName} ${pet.lastName}`, nombreAdoptar: `${user.firstName} ${user.lastName}`, emailAdoptar: user.email}),
           
         });
         

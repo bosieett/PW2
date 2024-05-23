@@ -109,7 +109,7 @@ const handleDelete = async (petId) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, pet: petName, nombreDueno: `${firstName} ${lastName}`, nombreAdoptar: `${loggedUser.firstName} ${loggedUser.lastName}`, emailAdoptar: loggedUser.email}),
+            body: JSON.stringify({ to:email, pet: petName, nombreDueno: `${firstName} ${lastName}`, nombreAdoptar: `${loggedUser.firstName} ${loggedUser.lastName}`, emailAdoptar: loggedUser.email}),
         });
 
         
